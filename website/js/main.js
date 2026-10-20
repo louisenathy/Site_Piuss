@@ -23,6 +23,40 @@ document.addEventListener('DOMContentLoaded', () => {
     currentMonth: 9 // 0-indexed: 9 = Outubro
   };
 
+  // Toast notification helper (iframe safe, avoids window.alert)
+  function showNotification(message) {
+    let toast = document.getElementById('piuss-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'piuss-toast';
+      toast.style.position = 'fixed';
+      toast.style.bottom = '85px';
+      toast.style.left = '50%';
+      toast.style.transform = 'translateX(-50%)';
+      toast.style.backgroundColor = '#17181d';
+      toast.style.color = '#fff';
+      toast.style.padding = '14px 22px';
+      toast.style.borderRadius = '12px';
+      toast.style.boxShadow = '0 12px 30px rgba(0,0,0,0.6)';
+      toast.style.border = '1px solid rgba(224, 90, 43, 0.4)';
+      toast.style.zIndex = '999999';
+      toast.style.fontSize = '14px';
+      toast.style.fontWeight = '500';
+      toast.style.textAlign = 'center';
+      toast.style.maxWidth = '90vw';
+      toast.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
+      document.body.appendChild(toast);
+    }
+    toast.textContent = message;
+    toast.style.opacity = '1';
+    toast.style.transform = 'translateX(-50%) translateY(0)';
+    clearTimeout(toast._timeout);
+    toast._timeout = setTimeout(() => {
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateX(-50%) translateY(10px)';
+    }, 4000);
+  }
+
   // ==========================================
   // 1. HEADER SCROLL & MOBILE DRAWER
   // ==========================================
@@ -229,7 +263,13 @@ Gostaria de verificar se esta data continua livre na agenda e tirar dúvidas par
 
       const encoded = encodeURIComponent(message);
       const url = `https://wa.me/${CONFIG.whatsappNumber}?text=${encoded}`;
-      window.open(url, '_blank');
+      const link = document.createElement('a');
+      link.href = url;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
     });
   }
 
@@ -308,7 +348,7 @@ Gostaria de verificar se esta data continua livre na agenda e tirar dúvidas par
       // Evento de clique para seleção de data
       dayEl.addEventListener('click', () => {
         if (dayEl.classList.contains('status-booked')) {
-          alert('Esta data já se encontra reservada na agenda oficial do Airbnb. Por favor, escolha uma data disponível marcada em verde ou laranja!');
+          showNotification('Esta data já se encontra reservada na agenda oficial do Airbnb. Por favor, escolha uma data disponível marcada em verde ou laranja!');
           return;
         }
 
@@ -350,7 +390,7 @@ Gostaria de verificar se esta data continua livre na agenda e tirar dúvidas par
   if (btnSelectFromCalendar) {
     btnSelectFromCalendar.addEventListener('click', () => {
       if (!selectedDateStr) {
-        alert('Por favor, clique em uma data disponível no calendário acima para selecioná-la.');
+        showNotification('Por favor, clique em uma data disponível no calendário acima para selecioná-la.');
         return;
       }
       // Rola suavemente até o simulador com a data marcada

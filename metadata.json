@@ -1,0 +1,7 @@
+{
+  "name": "Piuss | Salão de Festas, Palco para Bandas & Karaokê",
+  "description": "Alugue o Piuss: salão de festas na Bela Vista com palco para bandas, churrasqueira a carvão, estrutura física de bar montado e salão superior com karaokê e projetor.",
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
