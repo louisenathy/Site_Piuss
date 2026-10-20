@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Piuss — Painel de Resgate de Oportunidades Airbnb</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0f1013;
+      color: #f7f7f8;
+    }
+    h1, h2, h3, .font-display {
+      font-family: 'Montserrat', sans-serif;
+    }
+    .lead-card {
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .lead-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px -5px rgba(224, 90, 43, 0.15);
+    }
+  </style>
+</head>
+<body class="antialiased p-4 md:p-8">
+
+  <div class="max-w-7xl mx-auto space-y-6">
+
+    <!-- Header do Painel -->
+    <header class="bg-[#17181d] border border-white/10 rounded-2xl p-6 shadow-xl">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold tracking-wider uppercase bg-[#e05a2b]/15 text-[#ff7244] border border-[#e05a2b]/30 mb-2">
+            <span>⚡ Estratégia Integrada: Mariana, Léo & Iara</span>
+          </div>
+          <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight text-white">
+            Painel de Resgate & Acolhimento de Leads Airbnb
+          </h1>
+          <p class="text-sm text-zinc-400 mt-1">
+            Diagnóstico individual, entregáveis visuais e abordagens de alta conversão — <strong class="text-white">sem pedidos de desculpas e sem culpados</strong>, focadas em hospitalidade e valor imediato.
+          </p>
+        </div>
+
+        <div class="flex items-center gap-2 bg-[#212229] px-4 py-2.5 rounded-xl border border-white/10">
+          <span class="text-emerald-400 font-bold text-lg">✓</span>
+          <div class="text-xs">
+            <span class="font-semibold block text-white">Diretriz Ativa:</span>
+            <span class="text-zinc-400">0 Pedidos de Desculpas • 100% Solução & Parceria</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Métricas Rápidas -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6 pt-6 border-t border-white/10">
+        <div class="p-3 bg-[#0f1013] rounded-xl border border-white/5">
+          <span class="text-xs text-zinc-400 block">Oportunidades Mapeadas</span>
+          <span class="text-2xl font-black text-white">14 Leads</span>
+        </div>
+        <div class="p-3 bg-[#0f1013] rounded-xl border border-white/5">
+          <span class="text-xs text-zinc-400 block">Pipeline em Jogo</span>
+          <span class="text-2xl font-black text-[#f3b344]">~R$ 42.000+</span>
+        </div>
+        <div class="p-3 bg-[#0f1013] rounded-xl border border-white/5">
+          <span class="text-xs text-zinc-400 block">Potencial Corporativo</span>
+          <span class="text-2xl font-black text-emerald-400">Checkout RH + Produtora</span>
+        </div>
+        <div class="p-3 bg-[#0f1013] rounded-xl border border-white/5">
+          <span class="text-xs text-zinc-400 block">Tom de Voz</span>
+          <span class="text-2xl font-black text-sky-400">Consultivo & VIP</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Filtros Interativos -->
+    <div class="flex flex-wrap items-center justify-between gap-3 bg-[#17181d] p-4 rounded-xl border border-white/10">
+      <div class="flex flex-wrap gap-2" id="filterContainer">
+        <button onclick="filterLeads('all')" class="filter-btn active px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-[#e05a2b] text-white transition-all">Todos (14)</button>
+        <button onclick="filterLeads('b2b')" class="filter-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-[#212229] text-zinc-400 hover:text-white border border-white/5 transition-all">B2B / Corporativo (2)</button>
+        <button onclick="filterLeads('datas-abertas')" class="filter-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-[#212229] text-zinc-400 hover:text-white border border-white/5 transition-all">Fev / Dezembro (3)</button>
+        <button onclick="filterLeads('pacotes')" class="filter-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-[#212229] text-zinc-400 hover:text-white border border-white/5 transition-all">Pacote Chave na Mão (4)</button>
+        <button onclick="filterLeads('duvidas')" class="filter-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-[#212229] text-zinc-400 hover:text-white border border-white/5 transition-all">Dúvidas Técnicas & Fotos (5)</button>
+      </div>
+
+      <div class="text-xs text-zinc-400">
+        Clique em <strong class="text-zinc-200">Copiar Mensagem</strong> para usar no chat do Airbnb ou WhatsApp
+      </div>
+    </div>
+
+    <!-- Grid de Leads -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5" id="leadsGrid">
+
+      <!-- LEAD 1: MARIANA (CHECKOUT RH) -->
+      <div class="lead-card bg-[#17181d] border border-white/10 hover:border-[#e05a2b]/50 rounded-2xl p-5 shadow-lg space-y-4" data-category="b2b datas-abertas">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">B2B Corporativo</span>
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-[#f3b344]">Ticket: ~R$ 16.850</span>
+              <span class="text-xs text-zinc-400">17-18/Dez • 100 pessoas</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mt-2">Mariana (Checkout RH)</h3>
+            <p class="text-xs text-zinc-400">Confraternização de Final de Ano • Open Bar Heineken</p>
+          </div>
+          <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20">Oportunidade Aberta</span>
+        </div>
+
+        <div class="bg-[#0f1013] p-3.5 rounded-xl border border-white/5 text-xs space-y-2">
+          <div>
+            <strong class="text-rose-400">Gargalo Identificado:</strong>
+            <span class="text-zinc-300">Processo decisório corporativo dependente de aprovação da diretoria sem proposta executiva formal e risco de concorrência na data.</span>
+          </div>
+          <div>
+            <strong class="text-sky-400">Ação de Mariana:</strong>
+            <span class="text-zinc-300">Envio de proposta executiva formal em PDF e concessão de pré-reserva de cortesia por 48h.</span>
+          </div>
+          <div>
+            <strong class="text-[#f3b344]">Artefato de Iara:</strong>
+            <span class="text-zinc-300">One-Page PDF Executivo "Piuss Corporate" com mapa do salão e itens do Open Bar.</span>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1.5">Abordagem de Léo (Sem desculpas / Hospitalidade Pura):</label>
+          <div class="relative bg-[#212229] border border-white/5 rounded-xl p-3.5 text-xs text-zinc-200 leading-relaxed message-box">
+            Olá, Mariana! Tudo bem? Passando para apoiar o planejamento da confraternização da Checkout RH. Para tornar a apresentação para sua diretoria super prática e ágil, preparamos uma Proposta Executiva em PDF já com o valor único fechado — incluindo o espaço exclusivo, bar com Heineken e estrutura de som/projetor. Além disso, seguramos uma pré-reserva prioritária da data de 17/18 de dezembro por 48 horas para o seu time. Segue a proposta completa em anexo!
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-2">
+          <span class="text-xs text-emerald-400 font-semibold">Prioridade Máxima Comercial</span>
+          <button onclick="copyMessage(this)" class="px-3.5 py-1.5 text-xs font-bold bg-[#e05a2b] hover:bg-[#ff7244] text-white rounded-lg transition-all flex items-center gap-1.5">
+            <span>📋</span> Copiar Mensagem
+          </button>
+        </div>
+      </div>
+
+      <!-- LEAD 2: GIOVANA -->
+      <div class="lead-card bg-[#17181d] border border-white/10 hover:border-[#e05a2b]/50 rounded-2xl p-5 shadow-lg space-y-4" data-category="datas-abertas pacotes">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">B2C Particular</span>
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-[#f3b344]">Ticket: ~R$ 2.680</span>
+              <span class="text-xs text-zinc-400">20-21/Fevereiro • 100 pessoas</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mt-2">Giovana</h3>
+            <p class="text-xs text-zinc-400">Aniversário com Churrasco & Banda ao Vivo</p>
+          </div>
+          <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20">Negociação Travada</span>
+        </div>
+
+        <div class="bg-[#0f1013] p-3.5 rounded-xl border border-white/5 text-xs space-y-2">
+          <div>
+            <strong class="text-rose-400">Gargalo Identificado:</strong>
+            <span class="text-zinc-300">Falta de consolidação do valor total somando churrasqueira, som e limpeza.</span>
+          </div>
+          <div>
+            <strong class="text-sky-400">Ação de Mariana:</strong>
+            <span class="text-zinc-300">Apresentar pacote único "chave na mão", consolidando todas as demandas em uma cifra única.</span>
+          </div>
+          <div>
+            <strong class="text-[#f3b344]">Artefato de Iara:</strong>
+            <span class="text-zinc-300">Card visual com foto da churrasqueira a carvão em brasa + checklist dos itens inclusos.</span>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1.5">Abordagem de Léo (Sem desculpas / Foco na Solução):</label>
+          <div class="relative bg-[#212229] border border-white/5 rounded-xl p-3.5 text-xs text-zinc-200 leading-relaxed message-box">
+            Oi, Giovana! Tudo bem? Para facilitar o planejamento do seu aniversário em fevereiro e você não ter trabalho de somar itens avulsos, consolidamos o Pacote Completo Churrasco Piuss: salão exclusivo, churrasqueira grande a carvão pronta para os preparos, suporte de som para banda ao vivo e taxa de limpeza inclusa por um valor total fechado. Assim sua única tarefa é comemorar com seus 100 convidados! Vamos garantir a sua data de fevereiro?
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-2">
+          <span class="text-xs text-amber-400 font-semibold">Janela aberta de alta conversão</span>
+          <button onclick="copyMessage(this)" class="px-3.5 py-1.5 text-xs font-bold bg-[#e05a2b] hover:bg-[#ff7244] text-white rounded-lg transition-all flex items-center gap-1.5">
+            <span>📋</span> Copiar Mensagem
+          </button>
+        </div>
+      </div>
+
+      <!-- LEAD 3: ALLAN DENI (PRODUTORA) -->
+      <div class="lead-card bg-[#17181d] border border-white/10 hover:border-[#e05a2b]/50 rounded-2xl p-5 shadow-lg space-y-4" data-category="b2b">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">B2B Produtora</span>
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-[#f3b344]">Recorrência Dia Útil</span>
+              <span class="text-xs text-zinc-400">Diária de 12h • 30 pessoas</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mt-2">Allan Deni (Gravação de Videoclipe)</h3>
+            <p class="text-xs text-zinc-400">Locação Comercial Audiovisual</p>
+          </div>
+          <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">Novo Negócio</span>
+        </div>
+
+        <div class="bg-[#0f1013] p-3.5 rounded-xl border border-white/5 text-xs space-y-2">
+          <div>
+            <strong class="text-rose-400">Gargalo Identificado:</strong>
+            <span class="text-zinc-300">Consulta para diária de 12h em dia disputado por festas noturnas sem oferta de dias úteis.</span>
+          </div>
+          <div>
+            <strong class="text-sky-400">Ação de Mariana:</strong>
+            <span class="text-zinc-300">Posicionar o Piuss para gravações de seg a qui com pacote de diária comercial.</span>
+          </div>
+          <div>
+            <strong class="text-[#f3b344]">Artefato de Iara:</strong>
+            <span class="text-zinc-300">Mini Media Kit Audiovisual com fotos da cenografia, bar e especificações elétricas.</span>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1.5">Abordagem de Léo (Propositiva & Comercial):</label>
+          <div class="relative bg-[#212229] border border-white/5 rounded-xl p-3.5 text-xs text-zinc-200 leading-relaxed message-box">
+            Allan, tudo bem? Para gravações e produções audiovisuais de 12 horas, temos uma grade especial de diária comercial de segunda a quinta-feira, com iluminação de bar, espaço amplo e pontos elétricos dedicados para a equipe técnica. Se o seu projeto tiver essa flexibilidade de dia útil, conseguimos condições muito vantajosas para a sua produção. Vamos conversar sobre o cronograma da sua produtora?
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-2">
+          <span class="text-xs text-sky-400 font-semibold">Ocupação de dias de semana</span>
+          <button onclick="copyMessage(this)" class="px-3.5 py-1.5 text-xs font-bold bg-[#e05a2b] hover:bg-[#ff7244] text-white rounded-lg transition-all flex items-center gap-1.5">
+            <span>📋</span> Copiar Mensagem
+          </button>
+        </div>
+      </div>
+
+      <!-- LEAD 4: VIVIANE -->
+      <div class="lead-card bg-[#17181d] border border-white/10 hover:border-[#e05a2b]/50 rounded-2xl p-5 shadow-lg space-y-4" data-category="pacotes">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-pink-500/20 text-pink-300 border border-pink-500/30">Indicação Quente</span>
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-[#f3b344]">Recorrência Bimestral</span>
+              <span class="text-xs text-zinc-400">Almoço & Dança • 45 pessoas</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mt-2">Viviane</h3>
+            <p class="text-xs text-zinc-400">Aniversário / Eventos Recorrentes Terceira Idade</p>
+          </div>
+          <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-red-500/10 text-red-400 border border-red-500/20">Resgate VIP</span>
+        </div>
+
+        <div class="bg-[#0f1013] p-3.5 rounded-xl border border-white/5 text-xs space-y-2">
+          <div>
+            <strong class="text-rose-400">Gargalo Identificado:</strong>
+            <span class="text-zinc-300">Cliente de indicação que precisa de acolhimento caloroso e proposta especial de parceria recorrente.</span>
+          </div>
+          <div>
+            <strong class="text-sky-400">Ação de Mariana:</strong>
+            <span class="text-zinc-300">Convite presencial VIP para visita guiada com café e proposta de parceria para eventos recorrentes.</span>
+          </div>
+          <div>
+            <strong class="text-[#f3b344]">Artefato de Iara:</strong>
+            <span class="text-zinc-300">Foto do salão com mesas montadas, luz natural e fácil circulação.</span>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1.5">Abordagem de Léo (Acolhimento & Valorização):</label>
+          <div class="relative bg-[#212229] border border-white/5 rounded-xl p-3.5 text-xs text-zinc-200 leading-relaxed message-box">
+            Olá, Viviane! Que alegria ver seu contato por recomendação! Nosso espaço no Bixiga tem uma energia muito acolhedora e uma infraestrutura perfeita para o seu almoço de aniversário e encontros periódicos. Queremos muito te receber para um café aqui na Rua Major Diogo, 518, para você conhecer o salão de perto e desenharmos juntos um formato especial com condições sob medida para os seus eventos. Que dia e horário ficam mais confortáveis para sua visita?
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-2">
+          <span class="text-xs text-pink-400 font-semibold">Cliente de alto LTV (Recorrente)</span>
+          <button onclick="copyMessage(this)" class="px-3.5 py-1.5 text-xs font-bold bg-[#e05a2b] hover:bg-[#ff7244] text-white rounded-lg transition-all flex items-center gap-1.5">
+            <span>📋</span> Copiar Mensagem
+          </button>
+        </div>
+      </div>
+
+      <!-- LEAD 5: JEFFERSON -->
+      <div class="lead-card bg-[#17181d] border border-white/10 hover:border-[#e05a2b]/50 rounded-2xl p-5 shadow-lg space-y-4" data-category="datas-abertas pacotes">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">B2C Particular</span>
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-[#f3b344]">Alta Temporada</span>
+              <span class="text-xs text-zinc-400">19-20/Dezembro • Noite Estendida</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mt-2">Jefferson</h3>
+            <p class="text-xs text-zinc-400">Festa de Aniversário até 04h da manhã</p>
+          </div>
+          <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20">Urgência Real</span>
+        </div>
+
+        <div class="bg-[#0f1013] p-3.5 rounded-xl border border-white/5 text-xs space-y-2">
+          <div>
+            <strong class="text-rose-400">Gargalo Identificado:</strong>
+            <span class="text-zinc-300">Alta concorrência de calendário em dezembro e necessidade de extensão de horário (até 4h/5h).</span>
+          </div>
+          <div>
+            <strong class="text-sky-400">Ação de Mariana:</strong>
+            <span class="text-zinc-300">Pré-formatação de pacote estendido com trava de segurança de calendário.</span>
+          </div>
+          <div>
+            <strong class="text-[#f3b344]">Artefato de Iara:</strong>
+            <span class="text-zinc-300">Card visual com selo "Últimas Datas Disponíveis de Dezembro".</span>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1.5">Abordagem de Léo (Escassez & Segurança):</label>
+          <div class="relative bg-[#212229] border border-white/5 rounded-xl p-3.5 text-xs text-zinc-200 leading-relaxed message-box">
+            Oi, Jefferson! Como dezembro é a época mais concorrida do ano em nosso salão, já deixamos pré-formatada a viabilidade do seu evento em horário estendido até às 04h da manhã, com o bar exclusivo e estrutura completa. Se fizer sentido para você, posso segurar essa data prioritariamente na nossa agenda para você organizar tudo com segurança. Vamos dar esse próximo passo?
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-2">
+          <span class="text-xs text-amber-400 font-semibold">Calendário concorrido</span>
+          <button onclick="copyMessage(this)" class="px-3.5 py-1.5 text-xs font-bold bg-[#e05a2b] hover:bg-[#ff7244] text-white rounded-lg transition-all flex items-center gap-1.5">
+            <span>📋</span> Copiar Mensagem
+          </button>
+        </div>
+      </div>
+
+      <!-- LEAD 6: BRUNO -->
+      <div class="lead-card bg-[#17181d] border border-white/10 hover:border-[#e05a2b]/50 rounded-2xl p-5 shadow-lg space-y-4" data-category="pacotes">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">B2C Particular</span>
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-[#f3b344]">Ticket: ~R$ 2.700</span>
+              <span class="text-xs text-zinc-400">75 a 100 convidados • Trazer Bebidas</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mt-2">Bruno</h3>
+            <p class="text-xs text-zinc-400">Celebração de Festa com Bar & Som</p>
+          </div>
+          <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-red-500/10 text-red-400 border border-red-500/20">Previsibilidade</span>
+        </div>
+
+        <div class="bg-[#0f1013] p-3.5 rounded-xl border border-white/5 text-xs space-y-2">
+          <div>
+            <strong class="text-rose-400">Gargalo Identificado:</strong>
+            <span class="text-zinc-300">Incerteza orçamentária sobre custos adicionais pós-locação.</span>
+          </div>
+          <div>
+            <strong class="text-sky-400">Ação de Mariana:</strong>
+            <span class="text-zinc-300">Apresentação de pacote consolidado transparente com todos os opcionais inclusos em valor fixo.</span>
+          </div>
+          <div>
+            <strong class="text-[#f3b344]">Artefato de Iara:</strong>
+            <span class="text-zinc-300">Tabela visual de itens inclusos com valor global transparente.</span>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1.5">Abordagem de Léo (Transparência Total):</label>
+          <div class="relative bg-[#212229] border border-white/5 rounded-xl p-3.5 text-xs text-zinc-200 leading-relaxed message-box">
+            Oi, Bruno! Para você ter total previsibilidade e tranquilidade no orçamento da sua comemoração, estruturamos uma opção de Pacote Integrado: salão total, infraestrutura de bar para você trazer suas bebidas com liberdade, suporte técnico para DJ e limpeza completa por um valor único e transparente. Quer que eu te envie o detalhamento do pacote fechado?
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-2">
+          <span class="text-xs text-emerald-400 font-semibold">Elimina atrito de preço</span>
+          <button onclick="copyMessage(this)" class="px-3.5 py-1.5 text-xs font-bold bg-[#e05a2b] hover:bg-[#ff7244] text-white rounded-lg transition-all flex items-center gap-1.5">
+            <span>📋</span> Copiar Mensagem
+          </button>
+        </div>
+      </div>
+
+      <!-- LEAD 7: EVELYN FERNANDA -->
+      <div class="lead-card bg-[#17181d] border border-white/10 hover:border-[#e05a2b]/50 rounded-2xl p-5 shadow-lg space-y-4" data-category="duvidas">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">B2C Particular</span>
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-[#f3b344]">Alta Qualificação</span>
+              <span class="text-xs text-zinc-400">70 pessoas • Buffet & Banda</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mt-2">Evelyn Fernanda</h3>
+            <p class="text-xs text-zinc-400">Aniversário com Buffet e Música ao Vivo</p>
+          </div>
+          <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-red-500/10 text-red-400 border border-red-500/20">Acolhimento</span>
+        </div>
+
+        <div class="bg-[#0f1013] p-3.5 rounded-xl border border-white/5 text-xs space-y-2">
+          <div>
+            <strong class="text-rose-400">Gargalo Identificado:</strong>
+            <span class="text-zinc-300">Dúvidas de logística para buffet e banda ao vivo.</span>
+          </div>
+          <div>
+            <strong class="text-sky-400">Ação de Mariana:</strong>
+            <span class="text-zinc-300">Validar a viabilidade técnica e acolher a cliente com apresentação personalizada.</span>
+          </div>
+          <div>
+            <strong class="text-[#f3b344]">Artefato de Iara:</strong>
+            <span class="text-zinc-300">Carrossel de fotos da cozinha de apoio e ponto elétrico da banda.</span>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1.5">Abordagem de Léo (Entusiasmo & Solução):</label>
+          <div class="relative bg-[#212229] border border-white/5 rounded-xl p-3.5 text-xs text-zinc-200 leading-relaxed message-box">
+            Olá, Evelyn! Que comemoração especial! O Piuss foi desenhado exatamente para eventos com música ao vivo e gastronomia própria: nossa cozinha de apoio dá total suporte ao seu buffet e temos infraestrutura elétrica dedicada para a sua banda fazer um show incrível. Preparei um material visual mostrando fotos da cozinha e do espaço da banda para você visualizar como tudo vai fluir perfeitamente. Vamos conversar sobre os detalhes da sua data?
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-2">
+          <span class="text-xs text-sky-400 font-semibold">Cliente com evento pronto</span>
+          <button onclick="copyMessage(this)" class="px-3.5 py-1.5 text-xs font-bold bg-[#e05a2b] hover:bg-[#ff7244] text-white rounded-lg transition-all flex items-center gap-1.5">
+            <span>📋</span> Copiar Mensagem
+          </button>
+        </div>
+      </div>
+
+      <!-- LEAD 8: NICOLLY -->
+      <div class="lead-card bg-[#17181d] border border-white/10 hover:border-[#e05a2b]/50 rounded-2xl p-5 shadow-lg space-y-4" data-category="duvidas">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">B2C Particular</span>
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-[#f3b344]">Salão Térreo</span>
+              <span class="text-xs text-zinc-400">50 pessoas • Comida & Bebida</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mt-2">Nicolly</h3>
+            <p class="text-xs text-zinc-400">Aniversário / Encontro de Família</p>
+          </div>
+          <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">Esclarecimento</span>
+        </div>
+
+        <div class="bg-[#0f1013] p-3.5 rounded-xl border border-white/5 text-xs space-y-2">
+          <div>
+            <strong class="text-rose-400">Gargalo Identificado:</strong>
+            <span class="text-zinc-300">Insegurança sobre acessibilidade e correspondência das fotos do anúncio.</span>
+          </div>
+          <div>
+            <strong class="text-sky-400">Ação de Mariana:</strong>
+            <span class="text-zinc-300">Enviar foto específica do térreo e convidá-la para visita presencial rápida.</span>
+          </div>
+          <div>
+            <strong class="text-[#f3b344]">Artefato de Iara:</strong>
+            <span class="text-zinc-300">Foto nítida em alta resolução da entrada e piso térreo com legenda descritiva.</span>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1.5">Abordagem de Léo (Direta & Tranquilizadora):</label>
+          <div class="relative bg-[#212229] border border-white/5 rounded-xl p-3.5 text-xs text-zinc-200 leading-relaxed message-box">
+            Oi, Nicolly! O espaço térreo do Piuss é perfeito para o seu grupo de 50 pessoas: ele possui entrada ampla e plana, excelente circulação, mesas para apoio e refrigeradores integrados para suas comidas e bebidas. Segue uma foto exclusiva do ambiente térreo pronto para receber seus convidados. Gostaria de dar um pulo aqui na Major Diogo para conferir pessoalmente?
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-2">
+          <span class="text-xs text-emerald-400 font-semibold">Foto resolve a objeção</span>
+          <button onclick="copyMessage(this)" class="px-3.5 py-1.5 text-xs font-bold bg-[#e05a2b] hover:bg-[#ff7244] text-white rounded-lg transition-all flex items-center gap-1.5">
+            <span>📋</span> Copiar Mensagem
+          </button>
+        </div>
+      </div>
+
+      <!-- LEAD 9: MARINA -->
+      <div class="lead-card bg-[#17181d] border border-white/10 hover:border-[#e05a2b]/50 rounded-2xl p-5 shadow-lg space-y-4" data-category="duvidas pacotes">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">B2C Particular</span>
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-[#f3b344]">Ticket: R$ 4.900</span>
+              <span class="text-xs text-zinc-400">130 pessoas • 3 Bartenders</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mt-2">Marina</h3>
+            <p class="text-xs text-zinc-400">Festa com Open Bar Completo</p>
+          </div>
+          <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20">Canal Direto</span>
+        </div>
+
+        <div class="bg-[#0f1013] p-3.5 rounded-xl border border-white/5 text-xs space-y-2">
+          <div>
+            <strong class="text-rose-400">Gargalo Identificado:</strong>
+            <span class="text-zinc-300">Dificuldade de visualização de arquivos grandes no chat do aplicativo.</span>
+          </div>
+          <div>
+            <strong class="text-sky-400">Ação de Mariana:</strong>
+            <span class="text-zinc-300">Resumir os pontos no chat e fornecer ponte direta para atendimento sem travas.</span>
+          </div>
+          <div>
+            <strong class="text-[#f3b344]">Artefato de Iara:</strong>
+            <span class="text-zinc-300">Menu sintetizado em imagem única e link do WhatsApp.</span>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1.5">Abordagem de Léo (Prática & Conectiva):</label>
+          <div class="relative bg-[#212229] border border-white/5 rounded-xl p-3.5 text-xs text-zinc-200 leading-relaxed message-box">
+            Oi, Marina! Para facilitar a visualização do seu Open Bar para 130 convidados, resumi aqui os drinks selecionados, a atuação dos 3 bartenders e a dinâmica de atendimento da nossa equipe. O cardápio está completo e pronto para atender seu público com muita agilidade. Também disponibilizei nosso contato direto caso queira alinhar cada detalhe com um clique: [Link WhatsApp]. Vamos em frente?
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-2">
+          <span class="text-xs text-amber-400 font-semibold">Resgate de lead pré-aprovado</span>
+          <button onclick="copyMessage(this)" class="px-3.5 py-1.5 text-xs font-bold bg-[#e05a2b] hover:bg-[#ff7244] text-white rounded-lg transition-all flex items-center gap-1.5">
+            <span>📋</span> Copiar Mensagem
+          </button>
+        </div>
+      </div>
+
+      <!-- LEAD 10: LETICIA -->
+      <div class="lead-card bg-[#17181d] border border-white/10 hover:border-[#e05a2b]/50 rounded-2xl p-5 shadow-lg space-y-4" data-category="duvidas">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">B2C Particular</span>
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-[#f3b344]">Festa Noturna</span>
+              <span class="text-xs text-zinc-400">70 pessoas • 21h às 04h</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mt-2">Leticia</h3>
+            <p class="text-xs text-zinc-400">Comemoração com Banda e Bar</p>
+          </div>
+          <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">Renovação</span>
+        </div>
+
+        <div class="bg-[#0f1013] p-3.5 rounded-xl border border-white/5 text-xs space-y-2">
+          <div>
+            <strong class="text-rose-400">Gargalo Identificado:</strong>
+            <span class="text-zinc-300">Período de 24h da pré-aprovação expirou antes da conclusão.</span>
+          </div>
+          <div>
+            <strong class="text-sky-400">Ação de Mariana:</strong>
+            <span class="text-zinc-300">Reativação imediata da pré-aprovação com renovação do link de checkout.</span>
+          </div>
+          <div>
+            <strong class="text-[#f3b344]">Artefato de Iara:</strong>
+            <span class="text-zinc-300">Link de checkout direto renovado.</span>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1.5">Abordagem de Léo (Prestativa & Atenta):</label>
+          <div class="relative bg-[#212229] border border-white/5 rounded-xl p-3.5 text-xs text-zinc-200 leading-relaxed message-box">
+            Oi, Leticia! Vi que o prazo automático do aplicativo expirou para sua data. Como o salão continua com disponibilidade nesta noite, acabo de renovar a sua pré-aprovação para que você possa garantir a data no momento que preferir. Segue o link ativo para confirmação: [Link Renovado]!
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-2">
+          <span class="text-xs text-sky-400 font-semibold">1 clique para reserva</span>
+          <button onclick="copyMessage(this)" class="px-3.5 py-1.5 text-xs font-bold bg-[#e05a2b] hover:bg-[#ff7244] text-white rounded-lg transition-all flex items-center gap-1.5">
+            <span>📋</span> Copiar Mensagem
+          </button>
+        </div>
+      </div>
+
+      <!-- LEAD 11: CARLA -->
+      <div class="lead-card bg-[#17181d] border border-white/10 hover:border-[#e05a2b]/50 rounded-2xl p-5 shadow-lg space-y-4" data-category="duvidas">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">B2C Particular</span>
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-[#f3b344]">Cozinha de Apoio</span>
+              <span class="text-xs text-zinc-400">Consulta Estrutural</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mt-2">Carla</h3>
+            <p class="text-xs text-zinc-400">Dúvida sobre Cozinha e Alimentação</p>
+          </div>
+          <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">Qualificação</span>
+        </div>
+
+        <div class="bg-[#0f1013] p-3.5 rounded-xl border border-white/5 text-xs space-y-2">
+          <div>
+            <strong class="text-rose-400">Gargalo Identificado:</strong>
+            <span class="text-zinc-300">Consulta pontual sobre existência de cozinha sem qualificação do evento.</span>
+          </div>
+          <div>
+            <strong class="text-sky-400">Ação de Mariana:</strong>
+            <span class="text-zinc-300">Resposta afirmativa ilustrada com sondagem consultiva.</span>
+          </div>
+          <div>
+            <strong class="text-[#f3b344]">Artefato de Iara:</strong>
+            <span class="text-zinc-300">Foto nítida da cozinha de apoio com bancadas e cubas higienizadas.</span>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1.5">Abordagem de Léo (Sondagem Consultiva):</label>
+          <div class="relative bg-[#212229] border border-white/5 rounded-xl p-3.5 text-xs text-zinc-200 leading-relaxed message-box">
+            Oi, Carla! Sim, temos uma cozinha funcional de apoio equipada com bancadas e cubas, além de churrasqueira grande a carvão integrada. O espaço dá total suporte tanto para buffets profissionais quanto para preparações próprias. Me conte um pouco sobre o formato do evento que você está imaginando para eu te enviar a melhor recomendação!
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-2">
+          <span class="text-xs text-emerald-400 font-semibold">Transforma dúvida em lead qualificado</span>
+          <button onclick="copyMessage(this)" class="px-3.5 py-1.5 text-xs font-bold bg-[#e05a2b] hover:bg-[#ff7244] text-white rounded-lg transition-all flex items-center gap-1.5">
+            <span>📋</span> Copiar Mensagem
+          </button>
+        </div>
+      </div>
+
+      <!-- LEAD 12: JULIANA -->
+      <div class="lead-card bg-[#17181d] border border-white/10 hover:border-[#e05a2b]/50 rounded-2xl p-5 shadow-lg space-y-4" data-category="duvidas">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">B2C Particular</span>
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-[#f3b344]">70 pessoas</span>
+              <span class="text-xs text-zinc-400">Espaço Exclusivo</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mt-2">Juliana</h3>
+            <p class="text-xs text-zinc-400">Celebração de Festa</p>
+          </div>
+          <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Link Direto</span>
+        </div>
+
+        <div class="bg-[#0f1013] p-3.5 rounded-xl border border-white/5 text-xs space-y-2">
+          <div>
+            <strong class="text-rose-400">Gargalo Identificado:</strong>
+            <span class="text-zinc-300">Instabilidade técnica no link anterior enviado para reserva.</span>
+          </div>
+          <div>
+            <strong class="text-sky-400">Ação de Mariana:</strong>
+            <span class="text-zinc-300">Fornecimento do link direto oficial e verificado para confirmação simplificada.</span>
+          </div>
+          <div>
+            <strong class="text-[#f3b344]">Artefato de Iara:</strong>
+            <span class="text-zinc-300">Botão/Link direto de reserva oficial.</span>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1.5">Abordagem de Léo (Apoio & Resolução):</label>
+          <div class="relative bg-[#212229] border border-white/5 rounded-xl p-3.5 text-xs text-zinc-200 leading-relaxed message-box">
+            Oi, Juliana! Segue aqui o link oficial e direto para a locação do Piuss: [Link Seguro]. O espaço comporta com máximo conforto os seus 70 convidados, com toda a infraestrutura pronta para vocês celebrarem com exclusividade. Estou à disposição caso precise de qualquer apoio para concluir sua reserva!
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-2">
+          <span class="text-xs text-emerald-400 font-semibold">Caminho livre para fechar</span>
+          <button onclick="copyMessage(this)" class="px-3.5 py-1.5 text-xs font-bold bg-[#e05a2b] hover:bg-[#ff7244] text-white rounded-lg transition-all flex items-center gap-1.5">
+            <span>📋</span> Copiar Mensagem
+          </button>
+        </div>
+      </div>
+
+      <!-- LEAD 13: BEATRIZ 2 -->
+      <div class="lead-card bg-[#17181d] border border-white/10 hover:border-[#e05a2b]/50 rounded-2xl p-5 shadow-lg space-y-4" data-category="duvidas">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">B2C Particular</span>
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-[#f3b344]">30 a 40 pessoas</span>
+              <span class="text-xs text-zinc-400">Aniversário Intimista</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mt-2">Beatriz (Aniversário)</h3>
+            <p class="text-xs text-zinc-400">Decoração e Bebidas no Bar</p>
+          </div>
+          <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Segurança Total</span>
+        </div>
+
+        <div class="bg-[#0f1013] p-3.5 rounded-xl border border-white/5 text-xs space-y-2">
+          <div>
+            <strong class="text-rose-400">Gargalo Identificado:</strong>
+            <span class="text-zinc-300">Falta de confirmação assertiva sobre a estrutura disponível.</span>
+          </div>
+          <div>
+            <strong class="text-sky-400">Ação de Mariana:</strong>
+            <span class="text-zinc-300">Confirmação entusiasta e envio do link de finalização.</span>
+          </div>
+          <div>
+            <strong class="text-[#f3b344]">Artefato de Iara:</strong>
+            <span class="text-zinc-300">Card de boas-vindas com confirmação dos itens liberados.</span>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1.5">Abordagem de Léo (Assertividade & Confiança):</label>
+          <div class="relative bg-[#212229] border border-white/5 rounded-xl p-3.5 text-xs text-zinc-200 leading-relaxed message-box">
+            Oi, Beatriz! Sim, está tudo pronto e perfeitamente alinhado para a sua celebração! O espaço estará exclusivo para vocês, com bar à disposição e apoio para suas comidas e decoração. Segue o link para confirmação imediata da sua reserva: [Link Checkout]. Qualquer dúvida, estamos por aqui!
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-2">
+          <span class="text-xs text-emerald-400 font-semibold">Decisão rápida</span>
+          <button onclick="copyMessage(this)" class="px-3.5 py-1.5 text-xs font-bold bg-[#e05a2b] hover:bg-[#ff7244] text-white rounded-lg transition-all flex items-center gap-1.5">
+            <span>📋</span> Copiar Mensagem
+          </button>
+        </div>
+      </div>
+
+      <!-- LEAD 14: EUGENIO -->
+      <div class="lead-card bg-[#17181d] border border-white/10 hover:border-[#e05a2b]/50 rounded-2xl p-5 shadow-lg space-y-4" data-category="b2b">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">Alto Ticket</span>
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-[#f3b344]">Ticket: R$ 8.996</span>
+              <span class="text-xs text-zinc-400">Múltiplos Dias</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mt-2">Eugenio</h3>
+            <p class="text-xs text-zinc-400">Locação de Múltiplos Dias</p>
+          </div>
+          <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-purple-500/10 text-purple-400 border border-purple-500/20">Sondagem VIP</span>
+        </div>
+
+        <div class="bg-[#0f1013] p-3.5 rounded-xl border border-white/5 text-xs space-y-2">
+          <div>
+            <strong class="text-rose-400">Gargalo Identificado:</strong>
+            <span class="text-zinc-300">Necessidade de sondagem consultiva de alto ticket.</span>
+          </div>
+          <div>
+            <strong class="text-sky-400">Ação de Mariana:</strong>
+            <span class="text-zinc-300">Abrir sondagem consultiva para entender a dinâmica de múltiplos dias.</span>
+          </div>
+          <div>
+            <strong class="text-[#f3b344]">Artefato de Iara:</strong>
+            <span class="text-zinc-300">Foto panorâmica elegante do salão em clima noturno.</span>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1.5">Abordagem de Léo (Recepção VIP & Acolhedora):</label>
+          <div class="relative bg-[#212229] border border-white/5 rounded-xl p-3.5 text-xs text-zinc-200 leading-relaxed message-box">
+            Olá, Eugenio! Seja muito bem-vindo ao Piuss. Notamos seu interesse em uma locação de múltiplos dias em nosso espaço na Bela Vista. Atendemos comemorações exclusivas e eventos especiais com estrutura completa de bar e lounge. Gostaria de entender melhor suas expectativas para prepararmos uma proposta sob medida. Qual formato de evento você tem em mente?
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-2">
+          <span class="text-xs text-purple-400 font-semibold">Potencial de alta margem</span>
+          <button onclick="copyMessage(this)" class="px-3.5 py-1.5 text-xs font-bold bg-[#e05a2b] hover:bg-[#ff7244] text-white rounded-lg transition-all flex items-center gap-1.5">
+            <span>📋</span> Copiar Mensagem
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Guia de Implementação Rápida -->
+    <footer class="bg-[#17181d] border border-white/10 rounded-2xl p-5 text-xs text-zinc-400 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="space-y-1">
+        <strong class="text-white block font-semibold">Ordem de Execução Recomendada por Mariana:</strong>
+        <span>1º Disparar proposta B2B Checkout RH ➔ 2º Enviar pacote único para Giovana (Fev) ➔ 3º Convite presencial para Viviane (Recorrente).</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span class="text-emerald-400 font-bold">Pronto para Envio Imediato</span>
+      </div>
+    </footer>
+
+  </div>
+
+  <script>
+    function filterLeads(category) {
+      const cards = document.querySelectorAll('.lead-card');
+      const buttons = document.querySelectorAll('.filter-btn');
+
+      buttons.forEach(btn => {
+        btn.classList.remove('bg-[#e05a2b]', 'text-white');
+        btn.classList.add('bg-[#212229]', 'text-zinc-400');
+      });
+
+      event.target.classList.remove('bg-[#212229]', 'text-zinc-400');
+      event.target.classList.add('bg-[#e05a2b]', 'text-white');
+
+      cards.forEach(card => {
+        if (category === 'all') {
+          card.style.display = 'block';
+        } else {
+          const categories = card.getAttribute('data-category').split(' ');
+          if (categories.includes(category)) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        }
+      });
+    }
+
+    function copyMessage(button) {
+      const card = button.closest('.lead-card');
+      const messageBox = card.querySelector('.message-box');
+      const textToCopy = messageBox.innerText.trim();
+
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        const originalContent = button.innerHTML;
+        button.innerHTML = '<span>✓</span> Copiado!';
+        button.classList.remove('bg-[#e05a2b]', 'hover:bg-[#ff7244]');
+        button.classList.add('bg-emerald-600');
+
+        setTimeout(() => {
+          button.innerHTML = originalContent;
+          button.classList.remove('bg-emerald-600');
+          button.classList.add('bg-[#e05a2b]', 'hover:bg-[#ff7244]');
+        }, 2000);
+      }).catch(err => {
+        console.error('Erro ao copiar texto: ', err);
+      });
+    }
+  </script>
+</body>
+</html>
