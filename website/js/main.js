@@ -93,22 +93,28 @@ document.addEventListener('DOMContentLoaded', () => {
   const spaceModalitySelect = document.getElementById('spaceModality');
   const eventTypeSelect = document.getElementById('eventType');
   const eventDateInput = document.getElementById('eventDate');
-  const eventPeriodSelect = document.getElementById('eventPeriod');
+  const eventStartTimeSelect = document.getElementById('eventStartTime');
+  const eventEndTimeSelect = document.getElementById('eventEndTime');
+  const durationInfoBadge = document.getElementById('durationInfoBadge');
+  const feeBreakdownCard = document.getElementById('feeBreakdownCard');
   const guestCountInput = document.getElementById('guestCount');
   const guestCountDisplay = document.getElementById('guestCountDisplay');
   const modalityLimitBadge = document.getElementById('modalityLimitBadge');
   const capacityWarning = document.getElementById('capacityWarning');
   const customOptionalNotes = document.getElementById('customOptionalNotes');
   const estimatedPriceEl = document.getElementById('estimatedPrice');
+  const estimatedPricePeriod = document.getElementById('estimatedPricePeriod');
   const btnAutoBooking = document.getElementById('btnAutoBooking');
   const btnAirbnbBooking = document.getElementById('btnAirbnbBooking');
   const extraCheckboxes = document.querySelectorAll('.extras-grid input[type="checkbox"]');
 
-  // Regras de Capacidade por Modalidade
+  // Regras de Capacidade e Pacote Base por Modalidade
+  // - Principal (Casa Toda) e Palco: Pacote de 8 horas
+  // - Karaokê: Pacote de 6 horas
   const MODALITY_LIMITS = {
-    casaToda: { max: 160, label: 'até 160 pessoas em pé', multiplier: 1.15, url: CONFIG.airbnbUrls.casaToda, name: 'Casa Toda' },
-    espacoPalco: { max: 100, label: 'até 100 pessoas em pé', multiplier: 0.85, url: CONFIG.airbnbUrls.espacoPalco, name: 'Espaço Palco (Térreo)' },
-    salaoKaraoke: { max: 50, label: 'até 50 pessoas sentadas', multiplier: 0.75, url: CONFIG.airbnbUrls.salaoKaraoke, name: 'Salão Karaokê (Piso Superior)' }
+    casaToda: { max: 160, label: 'até 160 pessoas em pé', multiplier: 1.15, url: CONFIG.airbnbUrls.casaToda, name: 'Casa Toda (Térreo + Superior)', packageHours: 8 },
+    espacoPalco: { max: 100, label: 'até 100 pessoas em pé', multiplier: 0.85, url: CONFIG.airbnbUrls.espacoPalco, name: 'Espaço Palco (Térreo)', packageHours: 8 },
+    salaoKaraoke: { max: 50, label: 'até 50 pessoas sentadas', multiplier: 0.75, url: CONFIG.airbnbUrls.salaoKaraoke, name: 'Salão Karaokê (Piso Superior)', packageHours: 6 }
   };
 
   function getCurrentModalityConfig() {
@@ -124,7 +130,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!btnAirbnbBooking) return;
     const mod = getCurrentModalityConfig();
     btnAirbnbBooking.href = mod.url;
-    btnAirbnbBooking.querySelector('span').textContent = `Ver Anúncio: ${mod.name} no Airbnb`;
+    btnAirbnbBooking.setAttribute('title', `Ver anúncio oficial da modalidade ${mod.name} no Airbnb`);
+    const span = btnAirbnbBooking.querySelector('span');
+    if (span) {
+      span.textContent = 'Ver Anúncio no Airbnb';
+    }
   }
 
   // Define data mínima como amanhã
@@ -138,14 +148,92 @@ document.addEventListener('DOMContentLoaded', () => {
     eventDateInput.value = `${yyyy}-${mm}-${dd}`;
   }
 
+  function parseTimeToMinutes(timeStr) {
+    if (!timeStr) return 0;
+    const parts = timeStr.split(':').map(Number);
+    return parts[0] * 60 + (parts[1] || 0);
+  }
+
+  // Calcula duração e horas adicionais
+  // Regra 1: Horas que excedem o pacote base (8h ou 6h)
+  // Regra 2: A casa encerra às 02h. Se selecionar encerramento igual ou maior que 02h, calculam-se horas adicionais em todos os casos (R$ 200/h)
+  function getEventTimingDetails(startTimeStr, endTimeStr, basePackageHours) {
+    const startMins = parseTimeToMinutes(startTimeStr || '18:00');
+    let endMins = parseTimeToMinutes(endTimeStr || '02:00');
+
+    // Se o término for menor ou igual ao início, o evento cruza a meia-noite (madrugada)
+    if (endMins <= startMins) {
+      endMins += 24 * 60;
+    }
+
+    const durationMins = endMins - startMins;
+    const durationHours = Math.round((durationMins / 60) * 10) / 10;
+
+    // Regra do pacote base
+    const extraHoursFromDuration = Math.max(0, Math.ceil(durationHours - basePackageHours));
+
+    // Regra do encerramento da casa às 02h (26h ou 1560 minutos)
+    // Se selecionou encerramento igual ou maior que 02h da madrugada:
+    let curfewExtraHours = 0;
+    const curfewMins = 26 * 60; // 02:00 da madrugada
+    if (endMins >= curfewMins) {
+      curfewExtraHours = Math.ceil((endMins - curfewMins) / 60) + 1;
+    }
+
+    // O total de horas adicionais considera a maior demanda entre estender além do pacote e estender após o limite da casa
+    const totalExtraHours = Math.max(extraHoursFromDuration, curfewExtraHours);
+
+    return {
+      durationHours,
+      extraHoursFromDuration,
+      curfewExtraHours,
+      totalExtraHours
+    };
+  }
+
   function calculateSimulation() {
     if (!guestCountInput || !estimatedPriceEl) return;
 
     const mod = getCurrentModalityConfig();
+    const startTimeStr = eventStartTimeSelect ? eventStartTimeSelect.value : '18:00';
+    const endTimeStr = eventEndTimeSelect ? eventEndTimeSelect.value : '02:00';
 
-    // Atualiza limites e badge
+    const timing = getEventTimingDetails(startTimeStr, endTimeStr, mod.packageHours);
+    const { durationHours, totalExtraHours, curfewExtraHours, extraHoursFromDuration } = timing;
+    const extraHourRate = 200;
+    const extraHourCost = totalExtraHours * extraHourRate;
+
+    // Atualiza limites e badge de capacidade (sem duplicar horas)
     if (modalityLimitBadge) {
-      modalityLimitBadge.textContent = `(Capacidade máxima: ${mod.label} • 8 horas)`;
+      modalityLimitBadge.textContent = `(Capacidade máxima: ${mod.label})`;
+    }
+
+    // Badge com informação dinâmica de duração e horas adicionais
+    if (durationInfoBadge) {
+      const hasExtra = totalExtraHours > 0;
+      if (hasExtra) {
+        durationInfoBadge.classList.add('has-extra');
+      } else {
+        durationInfoBadge.classList.remove('has-extra');
+      }
+
+      let curfewNotice = '';
+      if (curfewExtraHours > 0) {
+        curfewNotice = `(A casa encerra às 02h. Encerramento às ${endTimeStr} acarreta hora adicional).`;
+      } else if (extraHoursFromDuration > 0) {
+        curfewNotice = `(Duração de ${durationHours}h excede o pacote base de ${mod.packageHours}h).`;
+      }
+
+      durationInfoBadge.innerHTML = `
+        <div class="flex items-center justify-between flex-wrap gap-1">
+          <span>⏱️ Duração: <strong>${durationHours} horas</strong> (${startTimeStr} às ${endTimeStr}) • Pacote base: <strong>${mod.packageHours}h inclusas</strong>.</span>
+          ${hasExtra 
+            ? `<strong class="text-amber-400 font-bold">+${totalExtraHours}h adicionais (R$ ${extraHourCost.toLocaleString('pt-BR')})</strong>` 
+            : `<span class="text-emerald-400 font-semibold">✓ Sem horas adicionais</span>`
+          }
+        </div>
+        ${curfewNotice ? `<div class="text-xs text-amber-200 mt-1">${curfewNotice}</div>` : ''}
+      `;
     }
 
     let guests = parseInt(guestCountInput.value, 10);
@@ -171,27 +259,174 @@ document.addEventListener('DOMContentLoaded', () => {
       isWeekend = (dayOfWeek === 0 || dayOfWeek === 5 || dayOfWeek === 6); // Dom, Sex, Sáb
     }
 
-    let base = (isWeekend ? CONFIG.basePriceWeekend : CONFIG.basePriceWeekday) * mod.multiplier;
+    const baseUnitRate = isWeekend ? CONFIG.basePriceWeekend : CONFIG.basePriceWeekday;
+    const base = Math.round(baseUnitRate * mod.multiplier);
 
-    // Duração: 8 horas base + adicional de horas extras
-    let extraHourCost = 0;
-    if (eventPeriodSelect) {
-      const periodOption = eventPeriodSelect.options[eventPeriodSelect.selectedIndex];
-      if (periodOption) {
-        extraHourCost = parseFloat(periodOption.getAttribute('data-extra') || '0');
-      }
-    }
+    // Identifica se a churrasqueira/fogão Venâncio está selecionada para pré-agendamento
+    const churrascoCb = document.getElementById('extraChurrasco');
+    const isChurrascoChecked = churrascoCb ? churrascoCb.checked : false;
 
     // Soma extras selecionados
     let extrasTotal = 0;
+    const fees = [];
+
+    // 1. Pacote Base da Modalidade
+    fees.push({
+      name: `Pacote Base: ${mod.name}`,
+      detail: `Fórmula: ${baseUnitRate.toLocaleString('pt-BR')} (${isWeekend ? 'Fim de Semana: Sex/Sáb/Dom' : 'Dia de Semana: Seg a Qui'}) × multiplicador ${mod.multiplier} • ${mod.packageHours}h inclusas`,
+      badge: `${mod.packageHours}h inclusas`,
+      badgeClass: '',
+      value: base,
+      isExtra: false
+    });
+
+    // 2. Horas Adicionais Calculadas (se houver)
+    if (totalExtraHours > 0) {
+      let extraReason = '';
+      if (curfewExtraHours > 0) {
+        extraReason = `Encerramento às ${endTimeStr} (Casa encerra às 02h) • ${totalExtraHours}h adicionais`;
+      } else {
+        extraReason = `Duração de ${durationHours}h excede pacote de ${mod.packageHours}h • ${totalExtraHours}h adicionais`;
+      }
+
+      fees.push({
+        name: `Horas Adicionais (${totalExtraHours}h extras)`,
+        detail: `Fórmula: ${totalExtraHours} hora(s) adicional(is) × R$ 200/h (${extraReason})`,
+        badge: `+${totalExtraHours}h adicionais`,
+        badgeClass: 'badge-extra',
+        value: extraHourCost,
+        isExtra: true
+      });
+    }
+
+    // 3. Taxas e Itens Opcionais Marcados
     extraCheckboxes.forEach(cb => {
       if (cb.checked) {
-        extrasTotal += parseFloat(cb.getAttribute('data-price') || '0');
+        const price = parseFloat(cb.getAttribute('data-price') || '0');
+        extrasTotal += price;
+
+        let name = cb.value;
+        let detail = '';
+        let badge = price === 0 ? 'Grátis' : `+R$ ${price}`;
+        let badgeClass = price === 0 ? 'badge-free' : '';
+
+        if (cb.id === 'extraChurrasco') {
+          name = 'Churrasqueira & Fogão Venâncio (Alvenaria)';
+          detail = 'Estrutura grande de alvenaria e fogão Venâncio • Incluído para pré-reserva (Cortesia: R$ 0)';
+          badge = 'Grátis (Pré-agendado)';
+          badgeClass = 'badge-free';
+        } else if (cb.id === 'extraLimpeza') {
+          name = 'Taxa de Limpeza Pós-Evento';
+          detail = 'Higienização integral e descarte pós-evento (R$ 350)';
+        } else if (cb.id === 'extraSom') {
+          name = 'Apoio Técnico de Som / DJ';
+          detail = 'Suporte operacional para som e iluminação cênica de palco (R$ 300)';
+        } else if (cb.id === 'extraHora') {
+          name = 'Hora Adicional Extra (Opcional)';
+          detail = '1 hora adicional avulsa selecionada no checklist (R$ 200/h)';
+        }
+
+        fees.push({
+          name,
+          detail,
+          badge,
+          badgeClass,
+          value: price,
+          isExtra: false
+        });
       }
     });
 
     const total = Math.round(base + extraHourCost + extrasTotal);
     estimatedPriceEl.textContent = total.toLocaleString('pt-BR');
+    if (estimatedPricePeriod) {
+      estimatedPricePeriod.textContent = `/ total da reserva (${durationHours}h de evento)`;
+    }
+
+    // Renderiza o somatório detalhado das taxas com o quadrante limpo e claro
+    if (feeBreakdownCard) {
+      const rulesHtml = `
+        <div class="rules-summary-box">
+          <div class="rules-header">
+            <span class="rules-badge-title">📋 REGRAS COMERCIAIS DA SIMULAÇÃO</span>
+            <span class="rules-subtitle">Condições transparentes aplicadas ao cálculo do seu evento:</span>
+          </div>
+          <div class="rules-grid">
+            <div class="rule-card">
+              <div class="rule-card-header">
+                <span class="rule-card-icon">🏢</span>
+                <span class="rule-card-title">Pacote Base</span>
+              </div>
+              <p class="rule-card-desc"><strong>${mod.name}</strong> • Pacote padrão de <strong>${mod.packageHours}h corridas</strong>.</p>
+              <div class="rule-card-status">
+                ${extraHoursFromDuration > 0 
+                  ? `<span class="badge-rule-warn">+${extraHoursFromDuration}h além do pacote</span>` 
+                  : `<span class="badge-rule-ok">✓ Duração dentro do pacote base</span>`
+                }
+              </div>
+            </div>
+
+            <div class="rule-card">
+              <div class="rule-card-header">
+                <span class="rule-card-icon">⏰</span>
+                <span class="rule-card-title">Horário Limite da Casa</span>
+              </div>
+              <p class="rule-card-desc">A casa encerra às <strong>02:00</strong>. Encerramento a partir das 02h conta horas adicionais (R$ 200/h).</p>
+              <div class="rule-card-status">
+                ${curfewExtraHours > 0 
+                  ? `<span class="badge-rule-warn">+${curfewExtraHours}h pós-02h (+R$ ${(curfewExtraHours * 200).toLocaleString('pt-BR')})</span>` 
+                  : `<span class="badge-rule-ok">✓ Encerramento até 02:00 (sem taxa extra)</span>`
+                }
+              </div>
+            </div>
+
+            <div class="rule-card">
+              <div class="rule-card-header">
+                <span class="rule-card-icon">⏱️</span>
+                <span class="rule-card-title">Duração Selecionada</span>
+              </div>
+              <p class="rule-card-desc">Horário: <strong>${startTimeStr} às ${endTimeStr}</strong> (total: <strong>${durationHours} horas</strong>).</p>
+              <div class="rule-card-status">
+                ${totalExtraHours > 0 
+                  ? `<span class="badge-rule-warn">+${totalExtraHours}h adicionais no total (+R$ ${extraHourCost.toLocaleString('pt-BR')})</span>` 
+                  : `<span class="badge-rule-ok">✓ Nenhuma hora adicional calculada</span>`
+                }
+              </div>
+            </div>
+
+            <div class="rule-card">
+              <div class="rule-card-header">
+                <span class="rule-card-icon">🥩</span>
+                <span class="rule-card-title">Churrasqueira & Fogão</span>
+              </div>
+              <p class="rule-card-desc">Estrutura grande de alvenaria e fogão Venâncio (grátis com pré-agendamento).</p>
+              <div class="rule-card-status">
+                ${isChurrascoChecked 
+                  ? `<span class="badge-rule-ok">✓ Pré-agendada no formulário (R$ 0)</span>` 
+                  : `<span class="badge-rule-neutral">○ Não selecionada (selecione grátis para incluir)</span>`
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      const feesHtml = fees.map(f => `
+        <div class="fee-row ${f.isExtra ? 'fee-row-extra' : ''}">
+          <div class="fee-row-left">
+            <div class="fee-row-title-line">
+              <span class="fee-row-name">${f.name}</span>
+              <span class="fee-row-badge ${f.badgeClass}">${f.badge}</span>
+            </div>
+            <span class="fee-row-detail">${f.detail}</span>
+          </div>
+          <span class="fee-row-value">${f.value === 0 ? 'R$ 0 (Incluso)' : `R$ ${f.value.toLocaleString('pt-BR')}`}</span>
+        </div>
+      `).join('');
+
+      feeBreakdownCard.innerHTML = rulesHtml + feesHtml;
+    }
+
     updateAirbnbLink();
     return total;
   }
@@ -212,7 +447,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (guestCountInput) guestCountInput.addEventListener('input', calculateSimulation);
   if (eventTypeSelect) eventTypeSelect.addEventListener('change', calculateSimulation);
   if (eventDateInput) eventDateInput.addEventListener('change', calculateSimulation);
-  if (eventPeriodSelect) eventPeriodSelect.addEventListener('change', calculateSimulation);
+  if (eventStartTimeSelect) eventStartTimeSelect.addEventListener('change', calculateSimulation);
+  if (eventEndTimeSelect) eventEndTimeSelect.addEventListener('change', calculateSimulation);
   extraCheckboxes.forEach(cb => cb.addEventListener('change', calculateSimulation));
 
   // Executa o cálculo inicial
@@ -230,8 +466,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const parts = eventDateRaw.split('-');
         formattedDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
       }
-      const period = eventPeriodSelect ? eventPeriodSelect.value : '8 horas corridas (até às 02h)';
+      const startTimeStr = eventStartTimeSelect ? eventStartTimeSelect.value : '18:00';
+      const endTimeStr = eventEndTimeSelect ? eventEndTimeSelect.value : '02:00';
+      const timing = getEventTimingDetails(startTimeStr, endTimeStr, mod.packageHours);
+      const { durationHours, totalExtraHours } = timing;
+      const extraHourCost = totalExtraHours * 200;
+
       const guests = guestCountInput ? guestCountInput.value : '50';
+
+      const churrascoCb = document.getElementById('extraChurrasco');
+      const isChurrascoChecked = churrascoCb ? churrascoCb.checked : false;
 
       const selectedExtras = [];
       extraCheckboxes.forEach(cb => {
@@ -239,25 +483,30 @@ document.addEventListener('DOMContentLoaded', () => {
           selectedExtras.push(cb.value);
         }
       });
-      const extrasText = selectedExtras.length > 0 ? selectedExtras.join('\n• ') : 'Apenas o espaço básico da modalidade (8h)';
+      const extrasText = selectedExtras.length > 0 ? selectedExtras.join('\n• ') : 'Nenhum opcional selecionado';
       const notes = customOptionalNotes && customOptionalNotes.value.trim() ? customOptionalNotes.value.trim() : 'Nenhuma observação extra';
       const totalPrice = estimatedPriceEl ? estimatedPriceEl.textContent : 'Consulte';
 
-      // Mensagem consultiva e vendedora para conversão imediata
+      // Mensagem consultiva e transparente com discriminação completa e regras da casa
       const message = `🎉 *SOLICITAÇÃO DE RESERVA — PIUSS*
 
 Olá, equipe do Piuss! Simulei meu evento no site oficial e quero confirmar a disponibilidade desta data:
 
-• *Modalidade Desejada:* ${modality} (8 horas corridas)
+• *Modalidade Desejada:* ${modality}
 • *Tipo de Evento:* ${eventType}
-• *Data Desejada:* ${formattedDate}
-• *Duração & Horário:* ${period}
+• *Data do Evento:* ${formattedDate}
+• *Horário:* Das ${startTimeStr} às ${endTimeStr} (${durationHours} horas corridas)
+• *Regras do Pacote Aplicadas:*
+  - Pacote Base: ${mod.packageHours} horas inclusas
+  - Horas Adicionais: ${totalExtraHours > 0 ? `${totalExtraHours}h adicionais a R$ 200/h (R$ ${extraHourCost.toLocaleString('pt-BR')})` : 'Nenhuma (dentro do limite do pacote)'}
+  - Encerramento: ${endTimeStr} (Casa encerra às 02h)
 • *Qtd. de Convidados:* ${guests} pessoas
+• *Cozinha / Churrasqueira:* ${isChurrascoChecked ? 'Churrasqueira e Fogão Venâncio (Estrutura de Alvenaria) incluído para pré-agendamento (Cortesia R$ 0)' : 'Sem pré-agendamento de churrasqueira'}
 • *Itens Opcionais Inclusos:*
 • ${extrasText}
 • *Outros Pedidos do Cliente:* ${notes}
 
-• *Estimativa Gerada:* R$ ${totalPrice}
+• *Estimativa Total Consolidada:* R$ ${totalPrice}
 
 Gostaria de verificar se esta data continua livre na agenda e tirar dúvidas para confirmarmos a reserva! 😊`;
 

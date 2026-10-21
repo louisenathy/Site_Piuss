@@ -18,8 +18,8 @@
   <meta property="og:description" content="O espaço completo para sua comemoração na Bela Vista: palco pronto para bandas com iluminação cênica, churrasqueira a carvão, estrutura de bar montado e karaokê liberado.">
   <meta property="og:image" content="assets/fotos/fachada/recepcao_logo.jpg">
 
-  <!-- Favicon com a identidade Piuss -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23e05a2b'/><text y='.72em' x='.22em' font-family='Arial,sans-serif' font-weight='900' font-size='50' fill='%23fff'>P</text></svg>">
+  <!-- Favicon com a identidade PiUSS -->
+  <link rel="icon" type="image/png" href="assets/fotos/logo_png.png">
 
   <!-- Google Fonts: Montserrat (Display) & Inter (Corpo) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -65,9 +65,9 @@
   <!-- ==================== HEADER & NAVBAR (ESTRUTURA DE ABAS ANTERIORES) ==================== -->
   <header class="site-header" id="header">
     <div class="header-container">
-      <a href="#hero" class="brand-logo" aria-label="Piuss Início">
-        <span class="logo-mark">P</span>
-        <span class="logo-text">Piuss<span class="logo-dot">.</span></span>
+      <a href="#hero" class="brand-logo" aria-label="PiUSS Início">
+        <span class="logo-mark"><img src="assets/fotos/logo_png.png" alt="PiUSS"></span>
+        <span class="logo-text">PiUSS<span class="logo-dot">.</span></span>
       </a>
 
       <nav class="desktop-nav" aria-label="Navegação Principal">
@@ -382,66 +382,59 @@
         <!-- Category Filters -->
         <div class="gallery-filters" role="tablist" aria-label="Filtros da Galeria">
           <button class="filter-btn active" data-category="all" role="tab">Todos os Ambientes</button>
-          <button class="filter-btn" data-category="terreo" role="tab">Térreo & Palco</button>
-          <button class="filter-btn" data-category="bar" role="tab">Bar Físico</button>
-          <button class="filter-btn" data-category="churrasqueira" role="tab">Churrasqueira</button>
-          <button class="filter-btn" data-category="andar" role="tab">Piso Superior & Karaokê</button>
-          <button class="filter-btn" data-category="fachada" role="tab">Fachada & Recepção</button>
+          <button class="filter-btn" data-category="fachada" role="tab">Fachada</button>
+          <button class="filter-btn" data-category="recepcao" role="tab">Recepção</button>
+          <button class="filter-btn" data-category="palco" role="tab">Palco para Shows</button>
+          <button class="filter-btn" data-category="gourmet" role="tab">Área Gourmet</button>
+          <button class="filter-btn" data-category="karaoke" role="tab">Salão com Karaokê</button>
           <button class="filter-btn" data-category="fumodromo" role="tab">Fumódromo</button>
         </div>
 
         <!-- Photos Grid com Legendas Padronizadas Conforme Solicitação -->
         <div class="gallery-grid" id="galleryGrid">
           
-          <!-- Foto 1: Palco Principal -->
-          <div class="gallery-item" data-category="terreo" data-src="assets/fotos/terreo/palco_principal.jpeg" data-caption="Andar Térreo - Palco">
-            <img src="assets/fotos/terreo/palco_principal.jpeg" alt="Andar Térreo - Palco" loading="lazy">
+          <!-- 1ª Seção: Fachada -->
+          <div class="gallery-item" data-category="fachada" data-src="assets/fotos/fachada/fachada_piuss.avif" data-caption="Fachada Oficial Piuss">
+            <img src="assets/fotos/fachada/fachada_piuss.avif" alt="Fachada Oficial Piuss" loading="lazy">
             <div class="gallery-item-overlay">
-              <h4 class="gallery-caption">Andar Térreo - Palco</h4>
+              <span class="gallery-tag">Fachada</span>
+              <h4 class="gallery-caption">Fachada Oficial Piuss</h4>
               <span class="gallery-zoom-icon">🔍 Ampliar Foto</span>
             </div>
           </div>
 
-          <!-- Foto 2: Recepção -->
-          <div class="gallery-item" data-category="fachada" data-src="assets/fotos/fachada/recepcao_logo.jpg" data-caption="Recepção">
+          <!-- 2ª Seção: Recepção (Recepção unida com bar do andar térreo, sendo as últimas fotos o bar) -->
+          <div class="gallery-item" data-category="recepcao" data-src="assets/fotos/fachada/recepcao_logo.jpg" data-caption="Recepção & Hall de Entrada">
             <img src="assets/fotos/fachada/recepcao_logo.jpg" alt="Recepção Piuss" loading="lazy">
             <div class="gallery-item-overlay">
-              <h4 class="gallery-caption">Recepção</h4>
+              <span class="gallery-tag">Recepção</span>
+              <h4 class="gallery-caption">Recepção & Hall de Entrada</h4>
               <span class="gallery-zoom-icon">🔍 Ampliar Foto</span>
             </div>
           </div>
 
-          <!-- Foto 3: Salão Superior Karaokê -->
-          <div class="gallery-item" data-category="andar" data-src="assets/fotos/andar/salao_superior_karaoke.jpeg" data-caption="Piso Superior - Salão com karaokê e projetor">
-            <img src="assets/fotos/andar/salao_superior_karaoke.jpeg" alt="Piso Superior - Salão com karaokê e projetor" loading="lazy">
-            <div class="gallery-item-overlay">
-              <span class="gallery-tag">Piso Superior</span>
-              <h4 class="gallery-caption">Salão com karaokê e projetor</h4>
-              <span class="gallery-zoom-icon">🔍 Ampliar Foto</span>
-            </div>
-          </div>
-
-          <!-- Foto 4: Bar Físico Montado -->
-          <div class="gallery-item" data-category="bar" data-src="assets/fotos/terreo/bar_balcao.jpeg" data-caption="Andar Térreo - Bar">
+          <!-- 2ª Seção (continuação): Últimas fotos da seção Recepção — Bar do Térreo -->
+          <div class="gallery-item" data-category="recepcao" data-src="assets/fotos/terreo/bar_balcao.jpeg" data-caption="Andar Térreo - Bar">
             <img src="assets/fotos/terreo/bar_balcao.jpeg" alt="Andar Térreo - Bar" loading="lazy">
             <div class="gallery-item-overlay">
+              <span class="gallery-tag">Recepção</span>
               <h4 class="gallery-caption">Andar Térreo - Bar</h4>
               <span class="gallery-zoom-icon">🔍 Ampliar Foto</span>
             </div>
           </div>
 
-          <!-- Foto 5: Churrasqueira e Fogão Industrial -->
-          <div class="gallery-item" data-category="churrasqueira" data-src="assets/fotos/terreo/churrasqueira_gourmet.jpeg" data-caption="Área Gourmet - Churrasqueira e fogão industrial">
-            <img src="assets/fotos/terreo/churrasqueira_gourmet.jpeg" alt="Área Gourmet - Churrasqueira e fogão industrial" loading="lazy">
+          <!-- 2ª Seção (continuação): Estrutura Física do Bar -->
+          <div class="gallery-item" data-category="recepcao" data-src="assets/fotos/terreo/bar_estrutura.jpeg" data-caption="Andar Térreo - Bar & Geladeiras">
+            <img src="assets/fotos/terreo/bar_estrutura.jpeg" alt="Andar Térreo - Bar & Geladeiras" loading="lazy">
             <div class="gallery-item-overlay">
-              <span class="gallery-tag">Área Gourmet</span>
-              <h4 class="gallery-caption">Churrasqueira e fogão industrial</h4>
+              <span class="gallery-tag">Recepção</span>
+              <h4 class="gallery-caption">Estrutura de Bar & Geladeiras</h4>
               <span class="gallery-zoom-icon">🔍 Ampliar Foto</span>
             </div>
           </div>
 
-          <!-- Foto 6: Palco para shows -->
-          <div class="gallery-item" data-category="terreo" data-src="assets/fotos/terreo/palco_som_iluminacao.jpeg" data-caption="Andar Térreo - Palco para shows">
+          <!-- 3ª Seção: Palco para Shows (mantendo a mesma foto de capa de palco para show, unida com andar térreo - palco) -->
+          <div class="gallery-item" data-category="palco" data-src="assets/fotos/terreo/palco_som_iluminacao.jpeg" data-caption="Andar Térreo - Palco para shows">
             <img src="assets/fotos/terreo/palco_som_iluminacao.jpeg" alt="Andar Térreo - Palco para shows" loading="lazy">
             <div class="gallery-item-overlay">
               <span class="gallery-tag">Andar Térreo</span>
@@ -450,8 +443,38 @@
             </div>
           </div>
 
-          <!-- Foto 7: Salão Superior Mesas & Arte (Unido ao Karaokê) -->
-          <div class="gallery-item" data-category="andar" data-src="assets/fotos/andar/salao_superior_arte.jpeg" data-caption="Piso Superior - Salão com karaokê e projetor">
+          <!-- 3ª Seção (unida): Andar Térreo - Palco Principal -->
+          <div class="gallery-item" data-category="palco" data-src="assets/fotos/terreo/palco_principal.jpeg" data-caption="Andar Térreo - Palco & Pista">
+            <img src="assets/fotos/terreo/palco_principal.jpeg" alt="Andar Térreo - Palco" loading="lazy">
+            <div class="gallery-item-overlay">
+              <span class="gallery-tag">Andar Térreo</span>
+              <h4 class="gallery-caption">Andar Térreo - Palco</h4>
+              <span class="gallery-zoom-icon">🔍 Ampliar Foto</span>
+            </div>
+          </div>
+
+          <!-- 4ª Seção: Área Gourmet -->
+          <div class="gallery-item" data-category="gourmet" data-src="assets/fotos/terreo/churrasqueira_gourmet.jpeg" data-caption="Área Gourmet - Churrasqueira e fogão industrial">
+            <img src="assets/fotos/terreo/churrasqueira_gourmet.jpeg" alt="Área Gourmet - Churrasqueira e fogão industrial" loading="lazy">
+            <div class="gallery-item-overlay">
+              <span class="gallery-tag">Área Gourmet</span>
+              <h4 class="gallery-caption">Churrasqueira e fogão industrial</h4>
+              <span class="gallery-zoom-icon">🔍 Ampliar Foto</span>
+            </div>
+          </div>
+
+          <!-- 5ª Seção: Salão com Karaokê (Piso Superior) -->
+          <div class="gallery-item" data-category="karaoke" data-src="assets/fotos/andar/salao_superior_karaoke.jpeg" data-caption="Piso Superior - Salão com karaokê e projetor">
+            <img src="assets/fotos/andar/salao_superior_karaoke.jpeg" alt="Piso Superior - Salão com karaokê e projetor" loading="lazy">
+            <div class="gallery-item-overlay">
+              <span class="gallery-tag">Piso Superior</span>
+              <h4 class="gallery-caption">Salão com karaokê e projetor</h4>
+              <span class="gallery-zoom-icon">🔍 Ampliar Foto</span>
+            </div>
+          </div>
+
+          <!-- 5ª Seção (continuação): Piso Superior Convivência & Arte -->
+          <div class="gallery-item" data-category="karaoke" data-src="assets/fotos/andar/salao_superior_arte.jpeg" data-caption="Piso Superior - Salão com karaokê e projetor">
             <img src="assets/fotos/andar/salao_superior_arte.jpeg" alt="Piso Superior - Salão com karaokê e projetor" loading="lazy">
             <div class="gallery-item-overlay">
               <span class="gallery-tag">Piso Superior</span>
@@ -460,16 +483,7 @@
             </div>
           </div>
 
-          <!-- Foto 8: Fachada Externa Oficial -->
-          <div class="gallery-item" data-category="fachada" data-src="assets/fotos/fachada/fachada_piuss.avif" data-caption="Piuss">
-            <img src="assets/fotos/fachada/fachada_piuss.avif" alt="Piuss" loading="lazy">
-            <div class="gallery-item-overlay">
-              <h4 class="gallery-caption">Piuss</h4>
-              <span class="gallery-zoom-icon">🔍 Ampliar Foto</span>
-            </div>
-          </div>
-
-          <!-- Foto 9: Fumódromo e Hall de banheiros -->
+          <!-- 6ª Seção: Fumódromo -->
           <div class="gallery-item" data-category="fumodromo" data-src="assets/fotos/fumodromo/area_fumodromo.jpeg" data-caption="Piso Superior - Fumódromo e Hall de banheiros">
             <img src="assets/fotos/fumodromo/area_fumodromo.jpeg" alt="Piso Superior - Fumódromo e Hall de banheiros" loading="lazy">
             <div class="gallery-item-overlay">
@@ -580,9 +594,9 @@
                   <span class="label-icon">🏢</span> Modalidade do Espaço
                 </label>
                 <select id="spaceModality" class="form-control" required>
-                  <option value="Casa Toda (Térreo + Superior)" selected>Casa Toda (Até 160 pessoas em pé • 8 horas)</option>
-                  <option value="Espaço Palco (Térreo)">Espaço Palco (Térreo • Até 100 pessoas em pé • 8 horas)</option>
-                  <option value="Salão Karaokê (Piso Superior)">Salão Karaokê (Piso Superior • Até 50 pessoas sentadas • 8 horas)</option>
+                  <option value="Casa Toda (Térreo + Superior)" selected>Casa Toda (Até 160 pessoas em pé)</option>
+                  <option value="Espaço Palco (Térreo)">Espaço Palco (Até 100 pessoas em pé)</option>
+                  <option value="Salão Karaokê (Piso Superior)">Salão Karaokê (Até 50 pessoas sentadas)</option>
                 </select>
               </div>
 
@@ -603,26 +617,61 @@
                 </select>
               </div>
 
-              <!-- Data Desejada -->
+              <!-- Data do Evento -->
               <div class="form-group">
                 <label for="eventDate" class="form-label">
-                  <span class="label-icon">📅</span> Data Prevista
+                  <span class="label-icon">📅</span> Data do Evento
                 </label>
                 <input type="date" id="eventDate" class="form-control" required min="2026-10-21">
                 <span class="form-help" id="dateAvailabilityNote">Datas aos finais de semana esgotam com antecedência.</span>
               </div>
 
-              <!-- Duração / Horário (Lógica de 8h e horas adicionais) -->
-              <div class="form-group">
-                <label for="eventPeriod" class="form-label">
-                  <span class="label-icon">⏰</span> Duração & Horário
+              <!-- Horário Inicial e Final -->
+              <div class="form-group time-range-group">
+                <label class="form-label">
+                  <span class="label-icon">⏰</span> Horário Inicial & Final do Evento
                 </label>
-                <select id="eventPeriod" class="form-control" required>
-                  <option value="8 horas corridas (até 02h da manhã)" data-hours="8" data-extra="0" selected>8 horas corridas (padrão até às 02h)</option>
-                  <option value="9 horas (1 hora adicional após 02h)" data-hours="9" data-extra="200">9 horas (1h extra até 03h • +R$ 200)</option>
-                  <option value="10 horas (2 horas adicionais após 02h)" data-hours="10" data-extra="400">10 horas (2h extras até 04h • +R$ 400)</option>
-                  <option value="Diurno (8 horas corridas)" data-hours="8" data-extra="0">Diurno / Almoço (8 horas corridas)</option>
-                </select>
+                <div class="time-selectors-grid">
+                  <div class="time-input-subgroup">
+                    <span class="time-sublabel">Início:</span>
+                    <select id="eventStartTime" class="form-control" required>
+                      <option value="10:00">10:00</option>
+                      <option value="11:00">11:00</option>
+                      <option value="12:00">12:00</option>
+                      <option value="13:00">13:00</option>
+                      <option value="14:00">14:00</option>
+                      <option value="15:00">15:00</option>
+                      <option value="16:00">16:00</option>
+                      <option value="17:00">17:00</option>
+                      <option value="18:00" selected>18:00</option>
+                      <option value="19:00">19:00</option>
+                      <option value="20:00">20:00</option>
+                      <option value="21:00">21:00</option>
+                      <option value="22:00">22:00</option>
+                    </select>
+                  </div>
+                  <div class="time-input-subgroup">
+                    <span class="time-sublabel">Encerramento:</span>
+                    <select id="eventEndTime" class="form-control" required>
+                      <option value="18:00">18:00</option>
+                      <option value="19:00">19:00</option>
+                      <option value="20:00">20:00</option>
+                      <option value="21:00">21:00</option>
+                      <option value="22:00">22:00</option>
+                      <option value="23:00">23:00</option>
+                      <option value="00:00">00:00</option>
+                      <option value="01:00">01:00</option>
+                      <option value="02:00" selected>02:00</option>
+                      <option value="03:00">03:00</option>
+                      <option value="04:00">04:00</option>
+                      <option value="05:00">05:00</option>
+                      <option value="06:00">06:00</option>
+                    </select>
+                  </div>
+                </div>
+                <div id="durationInfoBadge" class="duration-info-badge">
+                  <!-- Atualizado dinamicamente via JS -->
+                </div>
               </div>
 
               <!-- Quantidade de Convidados com Alerta Dinâmico de Capacidade -->
@@ -657,12 +706,12 @@
               
               <div class="extras-grid">
                 
-                <!-- Churrasqueira sem cobrança (R$ 0, requer aviso prévio) -->
-                <label class="extra-checkbox-card" style="border-color: rgba(45, 184, 75, 0.4);">
-                  <input type="checkbox" id="extraChurrasco" value="Churrasqueira a Carvão (Grátis - Requer aviso prévio)" data-price="0" checked>
+                <!-- Churrasqueira & Fogão Venâncio (requer aviso prévio) -->
+                <label class="extra-checkbox-card" id="cardExtraChurrasco">
+                  <input type="checkbox" id="extraChurrasco" value="Churrasqueira & Fogão Venâncio (requer aviso prévio)" data-price="0" checked>
                   <div class="extra-content">
-                    <span class="extra-name">Churrasqueira a Carvão</span>
-                    <span class="extra-sub text-emerald-400 font-semibold">R$ 0 (Grátis) • Requer aviso prévio</span>
+                    <span class="extra-name">Churrasqueira & Fogão Venâncio (Alvenaria)</span>
+                    <span class="extra-sub text-emerald-accent">R$ 0 (Grátis) • Mesmo grátis, selecione para incluir e garantir o pré-agendamento da estrutura</span>
                   </div>
                 </label>
 
@@ -695,40 +744,47 @@
 
               </div>
 
-              <!-- Campo para o cliente solicitar outros itens opcionais -->
+              <!-- Campo para o cliente solicitar outros itens opcionais (perfeitamente alinhado ao layout) -->
               <div class="optional-notes-box">
-                <label for="customOptionalNotes" class="form-label text-xs text-zinc-300 mt-3">
-                  Precisa de algo mais para o seu evento? Digite aqui outros itens opcionais que deseja solicitar:
+                <label for="customOptionalNotes" class="optional-notes-label">
+                  <span class="label-icon">✍️</span>
+                  <span>Precisa de algo mais para o seu evento? Digite aqui outros itens opcionais que deseja solicitar:</span>
                 </label>
-                <textarea id="customOptionalNotes" class="form-control text-xs" rows="2" placeholder="Ex: necessidade de mesas extras, horário antecipado para montagem, etc."></textarea>
+                <textarea id="customOptionalNotes" class="form-control optional-notes-input" rows="2" placeholder="Ex: necessidade de mesas extras, montagem antecipada, geladeiras adicionais, etc."></textarea>
               </div>
             </div>
 
             <!-- Resumo da Simulação -->
             <div class="simulator-summary-box">
               <div class="summary-details">
-                <span class="summary-label">Estimativa Consolidada:</span>
+                <span class="summary-label">Estimativa Consolidada & Somatório Detalhado:</span>
+
+                <!-- Detalhamento discriminado das taxas e valores -->
+                <div class="fee-breakdown-card" id="feeBreakdownCard">
+                  <!-- Renderizado dinamicamente via JS -->
+                </div>
+
                 <div class="summary-price-wrapper">
                   <span class="currency">R$</span>
                   <span class="price-value" id="estimatedPrice">1.890</span>
-                  <span class="price-period">/ 8 horas de evento</span>
+                  <span class="price-period" id="estimatedPricePeriod">/ valor total estimado</span>
                 </div>
-                <p class="summary-disclaimer">
-                  🔒 Valor base estimado. O churrasco requer apenas aviso prévio sem taxa extra. Cada hora adicional custa R$ 200.
+                <p class="summary-disclaimer" id="summaryDisclaimer">
+                  🔒 Valor discriminado com transparência total: pacote base + horas adicionais (se houver) + taxas opcionais selecionadas. Sem cobranças surpresas!
                 </p>
               </div>
 
               <div class="summary-action">
-                <button type="button" id="btnAutoBooking" class="btn btn-lg btn-whatsapp btn-block shadow-glow pulse-btn">
+                <button type="button" id="btnAutoBooking" class="btn btn-whatsapp btn-summary shadow-glow pulse-btn">
                   <svg class="icon icon-whatsapp" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.592 2.654-.696c1.02.571 1.813.784 2.806.784h.003c3.18 0 5.767-2.587 5.768-5.766.001-3.181-2.586-5.767-5.771-5.771zm7.42 5.766c-.001 4.093-3.332 7.424-7.423 7.424-1.255 0-2.484-.319-3.564-.925l-4.717 1.238 1.26-4.593c-.696-1.144-1.064-2.464-1.064-3.815.001-4.093 3.332-7.425 7.424-7.425 4.091 0 7.422 3.332 7.424 7.425z"/></svg>
                   <span>Reservar Esta Data via WhatsApp</span>
                 </button>
 
-                <div class="or-divider">ou reserve pelo airbnb</div>
+                <div class="or-divider"><span>ou reserve pelo airbnb</span></div>
 
-                <a href="https://www.airbnb.com.br/rooms/1597439801435361378?guests=1&adults=1&s=67&unique_share_id=e0e79d63-2d7c-4f73-b2c6-f8e935d0dec6" id="btnAirbnbBooking" target="_blank" rel="noopener noreferrer" class="btn btn-airbnb btn-block">
+                <a href="https://www.airbnb.com.br/rooms/1597439801435361378?guests=1&adults=1&s=67&unique_share_id=e0e79d63-2d7c-4f73-b2c6-f8e935d0dec6" id="btnAirbnbBooking" target="_blank" rel="noopener noreferrer" class="btn btn-airbnb btn-summary">
                   <svg class="icon icon-airbnb" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
-                  <span>Ver Anúncio Oficial no Airbnb</span>
+                  <span>Ver Anúncio no Airbnb</span>
                 </a>
               </div>
             </div>
@@ -862,37 +918,46 @@
               <!-- Canais de Contato -->
               <div class="contact-channels">
                 
+                <!-- WhatsApp Oficial -->
                 <a href="https://wa.me/5511921422403?text=Ol%C3%A1!%20Gostaria%20de%20consultar%20uma%20data%20no%20Piuss." target="_blank" rel="noopener noreferrer" class="channel-link whatsapp-channel">
                   <div class="channel-icon">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.592 2.654-.696c1.02.571 1.813.784 2.806.784h.003c3.18 0 5.767-2.587 5.768-5.766.001-3.181-2.586-5.767-5.771-5.771zm7.42 5.766c-.001 4.093-3.332 7.424-7.423 7.424-1.255 0-2.484-.319-3.564-.925l-4.717 1.238 1.26-4.593c-.696-1.144-1.064-2.464-1.064-3.815.001-4.093 3.332-7.425 7.424-7.425 4.091 0 7.422 3.332 7.424 7.425z"/></svg>
+                    <svg viewBox="0 0 24 24" fill="currentColor" class="social-logo-svg"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.592 2.654-.696c1.02.571 1.813.784 2.806.784h.003c3.18 0 5.767-2.587 5.768-5.766.001-3.181-2.586-5.767-5.771-5.771zm7.42 5.766c-.001 4.093-3.332 7.424-7.423 7.424-1.255 0-2.484-.319-3.564-.925l-4.717 1.238 1.26-4.593c-.696-1.144-1.064-2.464-1.064-3.815.001-4.093 3.332-7.425 7.424-7.425 4.091 0 7.422 3.332 7.424 7.425z"/></svg>
                   </div>
                   <div class="channel-texts">
                     <strong>WhatsApp Oficial de Atendimento</strong>
-                    <span>(11) 92142-2403 • Resposta rápida para orçamentos e visitas</span>
+                    <span>(11) 92142-2403 • Resposta rápida para orçamentos e agendamento de visitas</span>
                   </div>
-                  <span class="channel-arrow">→</span>
+                  <div class="channel-cta">
+                    <span class="btn btn-sm btn-whatsapp channel-cta-btn shadow-glow">Chamar no WhatsApp 📲</span>
+                  </div>
                 </a>
 
+                <!-- Instagram Oficial -->
                 <a href="https://www.instagram.com/seu.piuss/" target="_blank" rel="noopener noreferrer" class="channel-link instagram-channel">
                   <div class="channel-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                    <svg viewBox="0 0 24 24" fill="currentColor" class="social-logo-svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
                   </div>
                   <div class="channel-texts">
                     <strong>Instagram Oficial (@seu.piuss)</strong>
-                    <span>Acompanhe eventos, bastidores e novidades</span>
+                    <span>Fotos, bastidores e cobertura de eventos reais</span>
                   </div>
-                  <span class="channel-arrow">→</span>
+                  <div class="channel-cta">
+                    <span class="btn btn-sm btn-instagram channel-cta-btn">Seguir no Instagram 📸</span>
+                  </div>
                 </a>
 
+                <!-- Google Maps -->
                 <a href="https://share.google/geKV5Cpukdi5pftjX" target="_blank" rel="noopener noreferrer" class="channel-link address-channel">
                   <div class="channel-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="social-logo-svg"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
                   </div>
                   <div class="channel-texts">
                     <strong>Localização: Rua Major Diogo, 518</strong>
-                    <span>Bela Vista, São Paulo - SP</span>
+                    <span>Bela Vista, São Paulo - SP • A 5 min da Av. Paulista</span>
                   </div>
-                  <span class="btn btn-xs btn-outline-amber">Abrir no Maps</span>
+                  <div class="channel-cta">
+                    <span class="btn btn-sm btn-outline-amber channel-cta-btn">Abrir no Maps 📍</span>
+                  </div>
                 </a>
 
               </div>
@@ -948,8 +1013,10 @@
     <div class="container footer-container">
       <div class="footer-top">
         <div class="footer-brand">
-          <span class="logo-mark" style="width:32px;height:32px;font-size:1.1rem;display:inline-flex;">P</span>
-          <span class="logo-text" style="font-size:1.3rem;margin-left:6px;">Piuss<span class="logo-dot">.</span></span>
+          <span class="logo-mark" style="width:34px;height:34px;display:inline-flex;border-radius:6px;overflow:hidden;vertical-align:middle;">
+            <img src="assets/fotos/logo_png.png" alt="PiUSS" style="width:100%;height:100%;object-fit:cover;">
+          </span>
+          <span class="logo-text" style="font-size:1.3rem;margin-left:8px;vertical-align:middle;">PiUSS<span class="logo-dot">.</span></span>
           <p>Locação de espaço com palco para bandas, iluminação cênica, bar montado, churrasqueira a carvão e karaokê liberado.</p>
           <span class="address-line">📍 Rua Major Diogo, 518 — Bela Vista, São Paulo - SP</span>
         </div>
