@@ -75,28 +75,73 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }, { passive: true });
 
-  // Mobile Drawer Toggle
+  // Mobile Drawer Toggle & Fechamento Suave
+  const mobileDrawerClose = document.getElementById('mobileDrawerClose');
+  const mobileSectionIndicator = document.getElementById('mobileSectionIndicator');
+  const mobileIndicatorText = document.getElementById('mobileIndicatorText');
+
+  const sectionTitles = {
+    'espaco': '1. O Espaço',
+    'estrutura': '2. Estrutura',
+    'modalidades': '3. Modalidades',
+    'galeria': '4. Galeria de Fotos',
+    'calendario': '5. Calendário Airbnb',
+    'simulador': '6. Simular Reserva',
+    'contato': '7. Contatos',
+    'faq': '8. Perguntas Frequentes'
+  };
+
+  function closeMobileDrawer() {
+    if (!mobileDrawer) return;
+    mobileDrawer.classList.remove('open');
+    if (mobileToggle) {
+      mobileToggle.classList.remove('active');
+      mobileToggle.setAttribute('aria-expanded', 'false');
+    }
+    mobileDrawer.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  function openMobileDrawer() {
+    if (!mobileDrawer) return;
+    mobileDrawer.classList.add('open');
+    if (mobileToggle) {
+      mobileToggle.classList.add('active');
+      mobileToggle.setAttribute('aria-expanded', 'true');
+    }
+    mobileDrawer.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
   if (mobileToggle && mobileDrawer) {
-    mobileToggle.addEventListener('click', () => {
-      mobileToggle.classList.toggle('active');
-      mobileDrawer.classList.toggle('open');
+    mobileToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (mobileDrawer.classList.contains('open')) {
+        closeMobileDrawer();
+      } else {
+        openMobileDrawer();
+      }
     });
 
-    mobileNavButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        mobileToggle.classList.remove('active');
-        mobileDrawer.classList.remove('open');
-      });
+    if (mobileDrawerClose) {
+      mobileDrawerClose.addEventListener('click', closeMobileDrawer);
+    }
+
+    // Fechar ao clicar fora do drawer
+    document.addEventListener('click', (e) => {
+      if (mobileDrawer.classList.contains('open') && !mobileDrawer.contains(e.target) && !mobileToggle.contains(e.target)) {
+        closeMobileDrawer();
+      }
     });
   }
 
-  // Smooth scroll handler com compensação exata do cabeçalho fixo
+  // Smooth scroll handler com compensação exata e independente do estado do menu
   function smoothScrollToSection(targetSelector) {
     const targetEl = document.querySelector(targetSelector);
     if (!targetEl) return;
-    const headerHeight = header ? header.offsetHeight : 80;
+    const headerHeight = 74; // Altura fixa garantida do cabeçalho
     const elementTop = targetEl.getBoundingClientRect().top + window.pageYOffset;
-    const offsetPosition = elementTop - headerHeight + 2;
+    const offsetPosition = elementTop - headerHeight;
 
     window.scrollTo({
       top: Math.max(0, offsetPosition),
@@ -112,7 +157,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const targetEl = document.querySelector(href);
         if (targetEl) {
           e.preventDefault();
-          smoothScrollToSection(href);
+          closeMobileDrawer();
+          setTimeout(() => {
+            smoothScrollToSection(href);
+          }, 40);
           
           if (link.classList.contains('nav-btn')) {
             navButtons.forEach(b => b.classList.remove('active'));
@@ -123,15 +171,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Scroll Spy: Destaca o botão correspondente conforme a rolagem da página
+  // Scroll Spy: Destaca o botão correspondente e anima transição no mobile
   const spySections = [
-    { id: 'experiencia', target: 'experiencia' },
-    { id: 'galeria', target: 'galeria' },
+    { id: 'espaco', target: 'espaco' },
     { id: 'estrutura', target: 'estrutura' },
-    { id: 'simulador', target: 'simulador' },
+    { id: 'modalidades', target: 'modalidades' },
+    { id: 'galeria', target: 'galeria' },
     { id: 'calendario', target: 'calendario' },
-    { id: 'contato', target: 'contato' }
+    { id: 'simulador', target: 'simulador' },
+    { id: 'contato', target: 'contato' },
+    { id: 'faq', target: 'faq' }
   ];
+
+  let lastActiveSectionId = '';
 
   function updateActiveNavOnScroll() {
     const scrollPos = window.scrollY + 140;
@@ -149,6 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     if (currentSectionId) {
+      // Atualiza botões desktop
       navButtons.forEach(btn => {
         if (btn.getAttribute('data-target') === currentSectionId) {
           btn.classList.add('active');
@@ -156,6 +209,40 @@ document.addEventListener('DOMContentLoaded', () => {
           btn.classList.remove('active');
         }
       });
+
+      // Atualiza botões no drawer mobile
+      document.querySelectorAll('.mobile-nav-btn').forEach(mBtn => {
+        if (mBtn.getAttribute('data-target') === currentSectionId) {
+          mBtn.classList.add('active');
+        } else {
+          mBtn.classList.remove('active');
+        }
+      });
+
+      // Transição visual perceptível no mobile ao trocar de seção
+      if (currentSectionId !== lastActiveSectionId) {
+        lastActiveSectionId = currentSectionId;
+        
+        // Destaque visual da seção ativa
+        spySections.forEach(s => {
+          const sEl = document.getElementById(s.id);
+          if (sEl) {
+            if (s.id === currentSectionId) {
+              sEl.classList.add('section-active');
+            } else {
+              sEl.classList.remove('section-active');
+            }
+          }
+        });
+
+        if (mobileSectionIndicator && mobileIndicatorText) {
+          mobileIndicatorText.textContent = sectionTitles[currentSectionId] || currentSectionId;
+          mobileSectionIndicator.classList.add('section-changed');
+          setTimeout(() => {
+            mobileSectionIndicator.classList.remove('section-changed');
+          }, 1200);
+        }
+      }
     } else if (window.scrollY < 300) {
       navButtons.forEach(btn => btn.classList.remove('active'));
     }
@@ -268,18 +355,18 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function calculateSimulation() {
-    if (!guestCountInput || !estimatedPriceEl) return;
+    if (!estimatedPriceEl) return;
 
     const mod = getCurrentModalityConfig();
     const startTimeStr = eventStartTimeSelect ? eventStartTimeSelect.value : '18:00';
     const endTimeStr = eventEndTimeSelect ? eventEndTimeSelect.value : '02:00';
 
     const timing = getEventTimingDetails(startTimeStr, endTimeStr, mod.packageHours);
-    const { durationHours, totalExtraHours, curfewExtraHours, extraHoursFromDuration } = timing;
+    const { durationHours, totalExtraHours, curfewExtraHours } = timing;
     const extraHourRate = 200;
     const extraHourCost = totalExtraHours * extraHourRate;
 
-    // Atualiza limites e badge de capacidade
+    // Atualiza limites e badge de capacidade se existirem
     if (modalityLimitBadge) {
       modalityLimitBadge.textContent = `(Capacidade máxima: ${mod.label})`;
     }
@@ -333,21 +420,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    let guests = parseInt(guestCountInput.value, 10);
-    guestCountDisplay.textContent = `${guests} convidados`;
-
-    // Alerta de capacidade excedida
-    if (guests > mod.max) {
-      if (capacityWarning) {
-        capacityWarning.textContent = `⚠️ Atenção: O ${mod.name} comporta no máximo ${mod.label}! Reduza os convidados ou selecione uma modalidade maior.`;
-        capacityWarning.classList.add('visible');
-      }
-    } else {
-      if (capacityWarning) {
-        capacityWarning.classList.remove('visible');
-      }
-    }
-
     // Verifica se a data é sexta, sábado ou domingo
     let isWeekend = true;
     if (eventDateInput && eventDateInput.value) {
@@ -359,11 +431,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const baseUnitRate = isWeekend ? CONFIG.basePriceWeekend : CONFIG.basePriceWeekday;
     const base = Math.round(baseUnitRate * mod.multiplier);
 
-    // Identifica se a churrasqueira/fogão Venâncio está selecionada para pré-agendamento
-    const churrascoCb = document.getElementById('extraChurrasco');
-    const isChurrascoChecked = churrascoCb ? churrascoCb.checked : false;
-
-    // Soma extras selecionados
+    // Soma extras selecionados com a regra de combo Buffet + Bebidas
     let extrasTotal = 0;
     const fees = [];
 
@@ -374,6 +442,7 @@ document.addEventListener('DOMContentLoaded', () => {
       badge: `${mod.packageHours}h inclusas`,
       badgeClass: '',
       value: base,
+      displayValue: `R$ ${base.toLocaleString('pt-BR')}`,
       isExtra: false
     });
 
@@ -392,47 +461,114 @@ document.addEventListener('DOMContentLoaded', () => {
         badge: `+${totalExtraHours}h adicionais`,
         badgeClass: 'badge-extra badge-danger',
         value: extraHourCost,
+        displayValue: `+ R$ ${extraHourCost.toLocaleString('pt-BR')}`,
         isExtra: true
       });
     }
 
-    // 3. Taxas e Itens Opcionais Marcados
-    extraCheckboxes.forEach(cb => {
-      if (cb.checked) {
-        const price = parseFloat(cb.getAttribute('data-price') || '0');
-        extrasTotal += price;
+    // 3. Checagem dos checkboxes opcionais
+    const churrascoCb = document.getElementById('extraChurrasco');
+    const buffetCb = document.getElementById('extraBuffet');
+    const bebidasCb = document.getElementById('extraBebidas');
+    const bandaCb = document.getElementById('extraBanda');
+    const djCb = document.getElementById('extraDJ');
 
-        let name = cb.value;
-        let detail = '';
-        let badge = price === 0 ? 'Grátis' : `+R$ ${price}`;
-        let badgeClass = price === 0 ? 'badge-free' : '';
+    const hasChurrasco = churrascoCb && churrascoCb.checked;
+    const hasBuffet = buffetCb && buffetCb.checked;
+    const hasBebidas = bebidasCb && bebidasCb.checked;
+    const hasBanda = bandaCb && bandaCb.checked;
+    const hasDJ = djCb && djCb.checked;
 
-        if (cb.id === 'extraChurrasco') {
-          name = 'Churrasqueira & Fogão Venâncio (Alvenaria)';
-          detail = 'Estrutura grande de alvenaria e fogão Venâncio • Incluído para pré-reserva (Cortesia: R$ 0)';
-          badge = 'Grátis (Pré-agendado)';
-          badgeClass = 'badge-free';
-        } else if (cb.id === 'extraLimpeza') {
-          name = 'Taxa de Limpeza Pós-Evento';
-          detail = 'Higienização integral e descarte pós-evento (R$ 350)';
-        } else if (cb.id === 'extraSom') {
-          name = 'Apoio Técnico de Som / DJ';
-          detail = 'Suporte operacional para som e iluminação cênica de palco (R$ 300)';
-        } else if (cb.id === 'extraHora') {
-          name = 'Hora Adicional Extra (Opcional)';
-          detail = '1 hora adicional avulsa selecionada no checklist (R$ 200/h)';
-        }
+    if (hasChurrasco) {
+      fees.push({
+        name: 'Churrasqueira & Fogão',
+        detail: 'Estrutura completa pronta para uso mediante pré-agendamento (Cortesia)',
+        badge: 'Cortesia (R$ 0)',
+        badgeClass: 'badge-free',
+        value: 0,
+        displayValue: 'R$ 0 (Cortesia)',
+        isExtra: false
+      });
+    }
 
+    // Regra da Taxa de Limpeza Pesada (Buffet e Bebidas)
+    // Caso seja selecionada buffet externo e bebidas de fora a cobrança será única, devendo destacar o desconto em uma delas no somatório total.
+    if (hasBuffet && hasBebidas) {
+      // Buffet cobra R$ 350
+      extrasTotal += 350;
+      fees.push({
+        name: 'Taxa de Limpeza Pesada — Buffet Externo',
+        detail: 'Higienização integral e descarte de resíduos de buffet no pós-evento',
+        badge: '+ R$ 350',
+        badgeClass: '',
+        value: 350,
+        displayValue: 'R$ 350',
+        isExtra: false
+      });
+
+      // Bebidas recebe o desconto combo de R$ 350 (cobrança única)
+      fees.push({
+        name: 'Bebidas Alcoólicas de Fora',
+        detail: 'Cobrança única de taxa de limpeza pesada aplicada com o Buffet Externo',
+        badge: 'Desconto Combo: -R$ 350',
+        badgeClass: 'badge-free badge-discount',
+        value: 0,
+        displayValue: 'R$ 0 (-R$ 350 Desconto)',
+        isExtra: false,
+        isDiscount: true
+      });
+    } else {
+      if (hasBuffet) {
+        extrasTotal += 350;
         fees.push({
-          name,
-          detail,
-          badge,
-          badgeClass,
-          value: price,
+          name: 'Taxa de Limpeza Pesada — Buffet Externo',
+          detail: 'Higienização integral e descarte de resíduos de buffet no pós-evento (R$ 350)',
+          badge: '+ R$ 350',
+          badgeClass: '',
+          value: 350,
+          displayValue: 'R$ 350',
           isExtra: false
         });
       }
-    });
+      if (hasBebidas) {
+        extrasTotal += 350;
+        fees.push({
+          name: 'Taxa de Limpeza Pesada — Bebidas Alcoólicas de Fora',
+          detail: 'Higienização e recolhimento de garrafas/embalagens trazidas de fora (R$ 350)',
+          badge: '+ R$ 350',
+          badgeClass: '',
+          value: 350,
+          displayValue: 'R$ 350',
+          isExtra: false
+        });
+      }
+    }
+
+    if (hasBanda) {
+      extrasTotal += 300;
+      fees.push({
+        name: 'Serviço Especializado de Técnico de Som (Banda ao Vivo)',
+        detail: 'Operação profissional de som de palco, retorno, microfones e iluminação cênica (R$ 300)',
+        badge: '+ R$ 300',
+        badgeClass: '',
+        value: 300,
+        displayValue: 'R$ 300',
+        isExtra: false
+      });
+    }
+
+    if (hasDJ) {
+      // Altere o check box hora adicional para o cliente informar se terá DJ, nesse caso não informe que não tem cobrança.
+      fees.push({
+        name: 'DJ no Evento',
+        detail: 'Atração musical com DJ contratado pelo cliente para animar a festa',
+        badge: 'Confirmado',
+        badgeClass: 'badge-dj',
+        value: 0,
+        displayValue: 'Confirmado',
+        isExtra: false
+      });
+    }
 
     const total = Math.round(base + extraHourCost + extrasTotal);
     estimatedPriceEl.textContent = total.toLocaleString('pt-BR');
@@ -443,7 +579,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Renderiza o somatório detalhado das taxas de forma limpa, consolidada e sem redundâncias
     if (feeBreakdownCard) {
       const feesHtml = fees.map(f => `
-        <div class="fee-row ${f.isExtra ? 'fee-row-extra' : ''}">
+        <div class="fee-row ${f.isExtra ? 'fee-row-extra' : ''} ${f.isDiscount ? 'fee-row-discount' : ''}">
           <div class="fee-row-left">
             <div class="fee-row-title-line">
               <span class="fee-row-name">${f.name}</span>
@@ -451,7 +587,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
             <span class="fee-row-detail">${f.detail}</span>
           </div>
-          <span class="fee-row-value">${f.value === 0 ? 'R$ 0 (Incluso)' : (f.isExtra ? `+ R$ ${f.value.toLocaleString('pt-BR')}` : `R$ ${f.value.toLocaleString('pt-BR')}`)}</span>
+          <span class="fee-row-value">${f.displayValue}</span>
         </div>
       `).join('');
 
@@ -464,18 +600,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Event Listeners para recálculo dinâmico
   if (spaceModalitySelect) {
-    spaceModalitySelect.addEventListener('change', () => {
-      const mod = getCurrentModalityConfig();
-      if (guestCountInput) {
-        guestCountInput.max = mod.max;
-        if (parseInt(guestCountInput.value, 10) > mod.max) {
-          guestCountInput.value = mod.max;
-        }
-      }
-      calculateSimulation();
-    });
+    spaceModalitySelect.addEventListener('change', calculateSimulation);
   }
-  if (guestCountInput) guestCountInput.addEventListener('input', calculateSimulation);
   if (eventTypeSelect) eventTypeSelect.addEventListener('change', calculateSimulation);
   if (eventDateInput) eventDateInput.addEventListener('change', calculateSimulation);
   if (eventStartTimeSelect) eventStartTimeSelect.addEventListener('change', calculateSimulation);
@@ -508,35 +634,48 @@ document.addEventListener('DOMContentLoaded', () => {
       const { durationHours, totalExtraHours } = timing;
       const extraHourCost = totalExtraHours * 200;
 
-      const guests = guestCountInput ? guestCountInput.value : '50';
-
       const churrascoCb = document.getElementById('extraChurrasco');
-      const isChurrascoChecked = churrascoCb ? churrascoCb.checked : false;
+      const buffetCb = document.getElementById('extraBuffet');
+      const bebidasCb = document.getElementById('extraBebidas');
+      const bandaCb = document.getElementById('extraBanda');
+      const djCb = document.getElementById('extraDJ');
+
+      const hasChurrasco = churrascoCb && churrascoCb.checked;
+      const hasBuffet = buffetCb && buffetCb.checked;
+      const hasBebidas = bebidasCb && bebidasCb.checked;
+      const hasBanda = bandaCb && bandaCb.checked;
+      const hasDJ = djCb && djCb.checked;
 
       const selectedExtras = [];
-      extraCheckboxes.forEach(cb => {
-        if (cb.checked) {
-          if (cb.id === 'extraChurrasco') {
-            selectedExtras.push('Churrasqueira & Fogão Venâncio (Alvenaria) — Cortesia (R$ 0)');
-          } else if (cb.id === 'extraLimpeza') {
-            selectedExtras.push('Taxa de Limpeza Pós-Evento — R$ 350');
-          } else if (cb.id === 'extraSom') {
-            selectedExtras.push('Apoio Técnico de Som / DJ — R$ 300');
-          } else if (cb.id === 'extraHora') {
-            selectedExtras.push('Hora Adicional no Checklist — R$ 200/h');
-          } else {
-            selectedExtras.push(cb.value);
-          }
+      if (hasChurrasco) {
+        selectedExtras.push('Churrasqueira & Fogão: Sim, pré-agendamento da estrutura (Cortesia)');
+      }
+      if (hasBuffet && hasBebidas) {
+        selectedExtras.push('Buffet Externo: Sim (Taxa de limpeza pesada: R$ 350)');
+        selectedExtras.push('Bebidas Alcoólicas de Fora: Sim (Cobrança única de limpeza pesada com Buffet — Desconto combo de -R$ 350 aplicado: R$ 0)');
+      } else {
+        if (hasBuffet) {
+          selectedExtras.push('Buffet Externo: Sim (Taxa de limpeza pesada: R$ 350)');
         }
-      });
+        if (hasBebidas) {
+          selectedExtras.push('Bebidas Alcoólicas de Fora: Sim (Taxa de limpeza pesada: R$ 350)');
+        }
+      }
+      if (hasBanda) {
+        selectedExtras.push('Banda ao Vivo: Sim (Serviço especializado de técnico de som: R$ 300)');
+      }
+      if (hasDJ) {
+        selectedExtras.push('DJ no Evento: Sim, teremos DJ');
+      }
+
       const extrasText = selectedExtras.length > 0 ? selectedExtras.map(item => `  • ${item}`).join('\n') : '  • Nenhum item opcional selecionado';
       const notes = customOptionalNotes && customOptionalNotes.value.trim() ? customOptionalNotes.value.trim() : 'Nenhuma observação extra';
       const totalPrice = estimatedPriceEl ? estimatedPriceEl.textContent : 'Consulte';
 
-      // Mensagem direta iniciando obrigatoriamente com a frase solicitada pelo usuário
-      const message = `Oi Piuss, Quero desconto no meu orçamento, vamos fechar?
+      // Mensagem direta sem pedidos de desconto, com confirmação de reserva imediata e detalhamento completo
+      const message = `🎉 *SOLICITAÇÃO DE RESERVA IMEDIATA — PIUSS*
 
-Simulei todas as opções do meu evento no site oficial e quero confirmar a reserva imediata desta data com vocês!
+Olá, equipe do Piuss! Simulei todas as opções do meu evento no site oficial e quero confirmar de imediato a reserva desta data com vocês:
 
 📋 *DETALHES COMPLETOS DO MEU ORÇAMENTO:*
 • *Modalidade Selecionada:* ${modality}
@@ -546,11 +685,9 @@ Simulei todas as opções do meu evento no site oficial e quero confirmar a rese
 • *Regras do Pacote e Horas:*
   - Pacote Base: ${mod.packageHours} horas inclusas
   - Horas Adicionais: ${totalExtraHours > 0 ? `${totalExtraHours}h extras (+ R$ ${extraHourCost.toLocaleString('pt-BR')})` : 'Nenhuma hora extra (dentro do pacote base)'}
-  - Horário Limite de Encerramento: 02h da madrugada
-• *Quantidade de Convidados:* ${guests} pessoas
-• *Estrutura Gourmet & Churrasqueira:* ${isChurrascoChecked ? 'Sim, pré-agendamento da Churrasqueira e Fogão Venâncio (Cortesia R$ 0)' : 'Não selecionado'}
+  - Horário Limite de Encerramento Padrão: 02h da madrugada
 
-✨ *ITENS OPCIONAIS SELECIONADOS:*
+✨ *ITENS OPCIONAIS & SERVIÇOS:*
 ${extrasText}
 
 ✍️ *OBSERVAÇÕES E PEDIDOS ESPECIAIS:*
@@ -558,7 +695,7 @@ ${notes}
 
 💰 *TOTAL CONSOLIDADO DO ORÇAMENTO:* R$ ${totalPrice}
 
-Conseguimos uma condição especial de desconto para confirmarmos a reserva de imediato? Aguardo o retorno de vocês! 🤝`;
+Gostaria de verificar a disponibilidade e os próximos passos para confirmarmos e garantirmos a data! Aguardo retorno. 🤝`;
 
       const encoded = encodeURIComponent(message);
       const url = `https://wa.me/${CONFIG.whatsappNumber}?text=${encoded}`;

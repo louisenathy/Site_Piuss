@@ -66,71 +66,92 @@
   <header class="site-header" id="header">
     <div class="header-container">
       <!-- Logo PiUSS Priorizada e Destacada -->
-      <a href="#hero" class="brand-logo" aria-label="PiUSS Início">
+      <a href="#espaco" class="brand-logo" aria-label="PiUSS Início">
         <span class="logo-mark"><img src="assets/fotos/logo_png.png" alt="PiUSS"></span>
         <span class="logo-text">PiUSS<span class="logo-dot">.</span></span>
       </a>
 
-      <!-- Barra de Cabeçalho Centralizada com Botões de Fácil Rolagem -->
+      <!-- Barra de Cabeçalho Centralizada com Botões de Fácil Rolagem pelas Seções -->
       <nav class="desktop-nav" aria-label="Navegação Principal">
         <div class="nav-dock">
-          <a href="#experiencia" class="nav-btn" data-target="experiencia">O Espaço</a>
-          <a href="#galeria" class="nav-btn" data-target="galeria">Galeria</a>
+          <a href="#espaco" class="nav-btn" data-target="espaco">O Espaço</a>
           <a href="#estrutura" class="nav-btn" data-target="estrutura">Estrutura</a>
-          <a href="#simulador" class="nav-btn" data-target="simulador">Simular Reserva</a>
+          <a href="#modalidades" class="nav-btn" data-target="modalidades">Modalidades</a>
+          <a href="#galeria" class="nav-btn" data-target="galeria">Galeria</a>
           <a href="#calendario" class="nav-btn" data-target="calendario">Calendário Airbnb</a>
+          <a href="#simulador" class="nav-btn" data-target="simulador">Simular Reserva</a>
           <a href="#contato" class="nav-btn" data-target="contato">Contatos</a>
+          <a href="#faq" class="nav-btn" data-target="faq">Perguntas Frequentes</a>
         </div>
       </nav>
 
-      <!-- Ações do Cabeçalho com Botões Alinhados -->
+      <!-- Ações do Cabeçalho com Botão de Menu Mobile -->
       <div class="header-actions">
-        <a href="#calendario" class="btn btn-sm btn-outline-amber desktop-only">
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/></svg>
-          <span>Verificar Datas</span>
-        </a>
-        <a href="https://wa.me/5511921422403?text=Ol%C3%A1!%20Vim%20pelo%20site%20do%20Piuss%20e%20gostaria%20de%20consultar%20a%20disponibilidade%20para%20meu%20evento." target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-whatsapp">
-          <svg class="icon icon-whatsapp" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.592 2.654-.696c1.02.571 1.813.784 2.806.784h.003c3.18 0 5.767-2.587 5.768-5.766.001-3.181-2.586-5.767-5.771-5.771zm7.42 5.766c-.001 4.093-3.332 7.424-7.423 7.424-1.255 0-2.484-.319-3.564-.925l-4.717 1.238 1.26-4.593c-.696-1.144-1.064-2.464-1.064-3.815.001-4.093 3.332-7.425 7.424-7.425 4.091 0 7.422 3.332 7.424 7.425z"/></svg>
-          <span>Falar no WhatsApp</span>
-        </a>
-
         <!-- Mobile Menu Toggle -->
-        <button class="mobile-toggle" id="mobileToggle" aria-label="Abrir Menu">
-          <span class="bar"></span>
-          <span class="bar"></span>
-          <span class="bar"></span>
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Abrir Menu de Navegação" aria-expanded="false">
+          <span class="mobile-toggle-bars">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+          </span>
+          <span class="mobile-toggle-label">Menu</span>
         </button>
       </div>
     </div>
 
-    <!-- Mobile Drawer Nav com Botões -->
-    <div class="mobile-drawer" id="mobileDrawer">
-      <div class="mobile-nav-dock">
-        <a href="#experiencia" class="mobile-nav-btn">O Espaço</a>
-        <a href="#galeria" class="mobile-nav-btn">Galeria</a>
-        <a href="#estrutura" class="mobile-nav-btn">Estrutura</a>
-        <a href="#simulador" class="mobile-nav-btn">Simular Reserva</a>
-        <a href="#calendario" class="mobile-nav-btn">Calendário Airbnb</a>
-        <a href="#faq" class="mobile-nav-btn">Dúvidas Frequentes</a>
-        <a href="#contato" class="mobile-nav-btn">Contatos</a>
+    <!-- Mobile Drawer Nav com Botões e Acesso Instantâneo -->
+    <div class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
+      <div class="mobile-drawer-header">
+        <span class="mobile-drawer-title">Navegação pelas Seções</span>
+        <button class="mobile-drawer-close" id="mobileDrawerClose" aria-label="Fechar Menu">&times;</button>
       </div>
-      <div class="mobile-drawer-cta">
-        <a href="#calendario" class="btn btn-outline-amber btn-block">
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/></svg>
-          <span>Verificar Datas Disponíveis</span>
+      <div class="mobile-nav-dock">
+        <a href="#espaco" class="mobile-nav-btn" data-target="espaco">
+          <span class="nav-icon">✨</span>
+          <span class="nav-text">1. O Espaço</span>
         </a>
-        <a href="https://wa.me/5511921422403?text=Ol%C3%A1!%20Vim%20pelo%20site%20do%20Piuss%20e%20gostaria%20de%20consultar%20a%20disponibilidade%20para%20meu%20evento." target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-block" style="margin-top: 10px;">
-          <svg class="icon icon-whatsapp" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.592 2.654-.696c1.02.571 1.813.784 2.806.784h.003c3.18 0 5.767-2.587 5.768-5.766.001-3.181-2.586-5.767-5.771-5.771zm7.42 5.766c-.001 4.093-3.332 7.424-7.423 7.424-1.255 0-2.484-.319-3.564-.925l-4.717 1.238 1.26-4.593c-.696-1.144-1.064-2.464-1.064-3.815.001-4.093 3.332-7.425 7.424-7.425 4.091 0 7.422 3.332 7.424 7.425z"/></svg>
-          <span>Falar no WhatsApp</span>
+        <a href="#estrutura" class="mobile-nav-btn" data-target="estrutura">
+          <span class="nav-icon">🎸</span>
+          <span class="nav-text">2. Estrutura</span>
+        </a>
+        <a href="#modalidades" class="mobile-nav-btn" data-target="modalidades">
+          <span class="nav-icon">🏢</span>
+          <span class="nav-text">3. Modalidades</span>
+        </a>
+        <a href="#galeria" class="mobile-nav-btn" data-target="galeria">
+          <span class="nav-icon">📸</span>
+          <span class="nav-text">4. Galeria de Fotos</span>
+        </a>
+        <a href="#calendario" class="mobile-nav-btn" data-target="calendario">
+          <span class="nav-icon">📅</span>
+          <span class="nav-text">5. Calendário Airbnb</span>
+        </a>
+        <a href="#simulador" class="mobile-nav-btn" data-target="simulador">
+          <span class="nav-icon">⚡</span>
+          <span class="nav-text">6. Simular Reserva</span>
+        </a>
+        <a href="#contato" class="mobile-nav-btn" data-target="contato">
+          <span class="nav-icon">📞</span>
+          <span class="nav-text">7. Contatos</span>
+        </a>
+        <a href="#faq" class="mobile-nav-btn" data-target="faq">
+          <span class="nav-icon">❓</span>
+          <span class="nav-text">8. Perguntas Frequentes</span>
         </a>
       </div>
     </div>
   </header>
 
+  <!-- Indicador Flutuante da Seção Ativa no Mobile (Transição Suave) -->
+  <div id="mobileSectionIndicator" class="mobile-section-indicator" aria-live="polite">
+    <span class="indicator-icon">📍</span>
+    <span class="indicator-text" id="mobileIndicatorText">O Espaço</span>
+  </div>
+
   <main id="main-content">
     
-    <!-- ==================== HERO SECTION ==================== -->
-    <section class="hero-section" id="hero">
+    <!-- ==================== O ESPAÇO (HERO ATÉ 0 RISCO) ==================== -->
+    <section class="hero-section" id="espaco">
       <div class="hero-bg-overlay"></div>
       <div class="hero-glow-amber"></div>
       <div class="hero-glow-gold"></div>
@@ -189,14 +210,14 @@
 
       </div>
 
-      <a href="#experiencia" class="hero-scroll-indicator" aria-label="Rolar para ver mais">
+      <a href="#estrutura" class="hero-scroll-indicator" aria-label="Rolar para ver mais">
         <span>Conheça os ambientes do Piuss</span>
         <svg class="icon-bounce" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
       </a>
     </section>
 
-    <!-- ==================== EXPERIÊNCIA & O QUE TEMOS ==================== -->
-    <section class="section experience-section" id="experiencia">
+    <!-- ==================== ESTRUTURA (LIBERDADE REAL PARA O SEU EVENTO) ==================== -->
+    <section class="section experience-section" id="estrutura">
       <div class="container">
         
         <div class="section-header text-center">
@@ -265,8 +286,8 @@
       </div>
     </section>
 
-    <!-- ==================== ESTRUTURA & MODALIDADES (AIRBNB) ==================== -->
-    <section class="section modalities-section" id="estrutura">
+    <!-- ==================== MODALIDADES DE LOCAÇÃO (AIRBNB) ==================== -->
+    <section class="section modalities-section" id="modalidades">
       <div class="container">
         
         <div class="section-header text-center">
@@ -570,6 +591,10 @@
               <button id="btnSelectFromCalendar" class="btn btn-sm btn-primary">
                 Garantir Data Selecionada
               </button>
+              <a href="https://www.airbnb.com.br/rooms/1597439801435361378?guests=1&adults=1&s=67&unique_share_id=e0e79d63-2d7c-4f73-b2c6-f8e935d0dec6" id="btnAirbnbBooking" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-airbnb">
+                <svg class="icon icon-airbnb" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+                <span>Ver Anúncio no Airbnb</span>
+              </a>
               <a href="https://wa.me/5511921422403?text=Ol%C3%A1!%20Vi%20uma%20data%20livre%20no%20calend%C3%A1rio%20e%20quero%20segurar%20a%20reserva%20agora." target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-whatsapp">
                 Segurar Data no WhatsApp 📲
               </a>
@@ -589,9 +614,6 @@
           <div class="simulator-header text-center">
             <div class="badge-direct">⚡ SIMULAÇÃO INSTANTÂNEA</div>
             <h2 class="simulator-title">Reserve ou Monte Seu Orçamento em Menos de 1 Minuto</h2>
-            <p class="simulator-subtitle">
-              Pacote padrão de <strong>8 horas corridas</strong> até as <strong>02h da manhã</strong> (com opção de hora adicional a R$ 200/h). Transparência total sem taxas escondidas!
-            </p>
           </div>
 
           <form id="bookingSimulatorForm" class="simulator-form" onsubmit="event.preventDefault();">
@@ -684,71 +706,58 @@
                 </div>
               </div>
 
-              <!-- Quantidade de Convidados com Alerta Dinâmico de Capacidade -->
-              <div class="form-group" style="grid-column: 1 / -1;">
-                <label for="guestCount" class="form-label">
-                  <span class="label-icon">👥</span> Número Estimado de Convidados: 
-                  <strong class="text-amber" id="guestCountDisplay">50 convidados</strong>
-                  <span class="text-xs text-zinc-400 font-normal ml-2" id="modalityLimitBadge">(Limite atual: até 160 pessoas em pé)</span>
-                </label>
-                <div class="range-container">
-                  <input type="range" id="guestCount" min="10" max="160" step="5" value="50" class="range-slider">
-                  <div class="range-labels">
-                    <span>10 pessoas</span>
-                    <span>50 pessoas</span>
-                    <span>100 pessoas</span>
-                    <span>160 pessoas</span>
-                  </div>
-                </div>
-                <!-- Alerta visual de limite de capacidade excedido -->
-                <div id="capacityWarning" class="capacity-warning">
-                  ⚠️ Capacidade excedida para esta modalidade!
-                </div>
-              </div>
-
             </div>
 
             <!-- Itens Opcionais -->
             <div class="extras-section">
               <label class="form-label">
-                <span class="label-icon">✨</span> Itens Opcionais:
+                <span class="label-icon">✨</span> Itens Opcionais do Evento:
               </label>
               
               <div class="extras-grid">
                 
-                <!-- Churrasqueira & Fogão Venâncio (requer aviso prévio) -->
+                <!-- Churrasqueira & Fogão (requer aviso prévio, sem Venâncio Alvenaria) -->
                 <label class="extra-checkbox-card" id="cardExtraChurrasco">
-                  <input type="checkbox" id="extraChurrasco" value="Churrasqueira & Fogão Venâncio (Alvenaria)" data-price="0" checked>
+                  <input type="checkbox" id="extraChurrasco" value="Churrasqueira & Fogão" data-price="0" checked>
                   <div class="extra-content">
-                    <span class="extra-name">Churrasqueira & Fogão Venâncio (Alvenaria)</span>
+                    <span class="extra-name">Churrasqueira & Fogão</span>
                     <span class="extra-sub text-emerald-accent">R$ 0 (Cortesia) • Selecione para garantir o pré-agendamento da estrutura</span>
                   </div>
                 </label>
 
-                <!-- Limpeza pós-evento R$ 350 -->
-                <label class="extra-checkbox-card">
-                  <input type="checkbox" id="extraLimpeza" value="Taxa de Limpeza Pós-Evento" data-price="350" checked>
+                <!-- Buffet Externo (Taxa de limpeza pesada R$ 350) -->
+                <label class="extra-checkbox-card" id="cardExtraBuffet">
+                  <input type="checkbox" id="extraBuffet" value="Buffet Externo" data-price="350">
                   <div class="extra-content">
-                    <span class="extra-name">Limpeza Pós-Evento</span>
-                    <span class="extra-sub">Opcional • R$ 350</span>
+                    <span class="extra-name">Vou trazer Buffet Externo</span>
+                    <span class="extra-sub">Taxa de limpeza pesada: R$ 350</span>
                   </div>
                 </label>
 
-                <!-- Apoio Som / DJ R$ 300 -->
-                <label class="extra-checkbox-card">
-                  <input type="checkbox" id="extraSom" value="Apoio Técnico de Som / DJ" data-price="300">
+                <!-- Bebidas Alcoólicas de Fora (Taxa de limpeza pesada R$ 350 / Cobrança Única se combo) -->
+                <label class="extra-checkbox-card" id="cardExtraBebidas">
+                  <input type="checkbox" id="extraBebidas" value="Bebidas Alcoólicas de Fora" data-price="350">
                   <div class="extra-content">
-                    <span class="extra-name">Apoio Som / DJ</span>
-                    <span class="extra-sub">Opcional • R$ 300</span>
+                    <span class="extra-name">Vou trazer Bebidas Alcoólicas de Fora</span>
+                    <span class="extra-sub">Taxa de limpeza pesada: R$ 350 <em class="combo-hint">(Cobrança única se trouxer buffet)</em></span>
                   </div>
                 </label>
 
-                <!-- Hora Adicional R$ 200 -->
-                <label class="extra-checkbox-card">
-                  <input type="checkbox" id="extraHora" value="Hora Adicional Contratada" data-price="200">
+                <!-- Banda ao Vivo (Serviço especializado de técnico de som R$ 300) -->
+                <label class="extra-checkbox-card" id="cardExtraBanda">
+                  <input type="checkbox" id="extraBanda" value="Banda ao Vivo" data-price="300">
                   <div class="extra-content">
-                    <span class="extra-name">Hora Adicional</span>
-                    <span class="extra-sub">Opcional • R$ 200 / hora</span>
+                    <span class="extra-name">Vou trazer Banda ao Vivo</span>
+                    <span class="extra-sub">Serviço especializado de técnico de som: R$ 300</span>
+                  </div>
+                </label>
+
+                <!-- Terá DJ no Evento (sem informar que não tem cobrança) -->
+                <label class="extra-checkbox-card" id="cardExtraDJ">
+                  <input type="checkbox" id="extraDJ" value="Terá DJ no Evento" data-price="0">
+                  <div class="extra-content">
+                    <span class="extra-name">Terá DJ no Evento</span>
+                    <span class="extra-sub">Informe se terá DJ contratado para animar sua festa</span>
                   </div>
                 </label>
 
@@ -790,12 +799,12 @@
               <textarea id="customOptionalNotes" class="form-control optional-notes-input" rows="2" placeholder="Ex: necessidade de mesas extras, montagem antecipada, geladeiras adicionais, etc."></textarea>
             </div>
 
-            <!-- Botões de Reserva e Anúncio (Alinhados diretamente abaixo do campo de texto a mais) -->
+            <!-- Botão de Reserva Imediata (Alinhado diretamente abaixo do campo de texto a mais) -->
             <div class="simulator-actions-wrapper">
               <p class="simulator-actions-notice">
                 <span>⚡ Envie seu orçamento completo e reserve de imediato sua data via WhatsApp:</span>
               </p>
-              <div class="simulator-actions-row">
+              <div class="simulator-actions-row single-action">
                 <button type="button" id="btnAutoBooking" class="btn btn-whatsapp btn-booking-action shadow-glow pulse-btn">
                   <span class="btn-progress-bar" id="btnBookingProgress"></span>
                   <span class="btn-booking-content" id="btnBookingContent">
@@ -803,11 +812,6 @@
                     <span class="btn-label-text">Reservar de Imediato via WhatsApp</span>
                   </span>
                 </button>
-
-                <a href="https://www.airbnb.com.br/rooms/1597439801435361378?guests=1&adults=1&s=67&unique_share_id=e0e79d63-2d7c-4f73-b2c6-f8e935d0dec6" id="btnAirbnbBooking" target="_blank" rel="noopener noreferrer" class="btn btn-airbnb btn-booking-action">
-                  <svg class="icon icon-airbnb" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
-                  <span>Ver Anúncio no Airbnb</span>
-                </a>
               </div>
             </div>
 
@@ -1020,9 +1024,9 @@
         <div class="footer-links-col">
           <h4>Ambientes</h4>
           <ul>
-            <li><a href="#estrutura">Casa Toda (Até 160)</a></li>
-            <li><a href="#estrutura">Espaço Palco (Até 100)</a></li>
-            <li><a href="#estrutura">Salão Karaokê (Até 50)</a></li>
+            <li><a href="#modalidades">Casa Toda (Até 160)</a></li>
+            <li><a href="#modalidades">Espaço Palco (Até 100)</a></li>
+            <li><a href="#modalidades">Salão Karaokê (Até 50)</a></li>
             <li><a href="#galeria">Galeria de Fotos</a></li>
           </ul>
         </div>
