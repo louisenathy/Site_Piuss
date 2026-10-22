@@ -743,18 +743,9 @@
                 </label>
 
               </div>
-
-              <!-- Campo para o cliente solicitar outros itens opcionais (perfeitamente alinhado ao layout) -->
-              <div class="optional-notes-box">
-                <label for="customOptionalNotes" class="optional-notes-label">
-                  <span class="label-icon">✍️</span>
-                  <span>Precisa de algo mais para o seu evento? Digite aqui outros itens opcionais que deseja solicitar:</span>
-                </label>
-                <textarea id="customOptionalNotes" class="form-control optional-notes-input" rows="2" placeholder="Ex: necessidade de mesas extras, montagem antecipada, geladeiras adicionais, etc."></textarea>
-              </div>
             </div>
 
-            <!-- Resumo da Simulação -->
+            <!-- Resumo da Simulação (Estimativa Consolidada & Somatório Detalhado) -->
             <div class="simulator-summary-box">
               <div class="summary-details">
                 <span class="summary-label">Estimativa Consolidada & Somatório Detalhado:</span>
@@ -773,16 +764,26 @@
                   🔒 Valor discriminado com transparência total: pacote base + horas adicionais (se houver) + taxas opcionais selecionadas. Sem cobranças surpresas!
                 </p>
               </div>
+            </div>
 
-              <div class="summary-action">
-                <button type="button" id="btnAutoBooking" class="btn btn-whatsapp btn-summary shadow-glow pulse-btn">
+            <!-- Campo para o cliente informar texto a mais (Abaixo da estimativa de valor) -->
+            <div class="optional-notes-box">
+              <label for="customOptionalNotes" class="optional-notes-label">
+                <span class="label-icon">✍️</span>
+                <span>Precisa de algo mais para o seu evento? Digite aqui outros itens opcionais que deseja solicitar:</span>
+              </label>
+              <textarea id="customOptionalNotes" class="form-control optional-notes-input" rows="2" placeholder="Ex: necessidade de mesas extras, montagem antecipada, geladeiras adicionais, etc."></textarea>
+            </div>
+
+            <!-- Botões de Reserva e Anúncio (Alinhados diretamente abaixo do campo de texto a mais) -->
+            <div class="simulator-actions-wrapper">
+              <div class="simulator-actions-row">
+                <button type="button" id="btnAutoBooking" class="btn btn-whatsapp btn-booking-action shadow-glow pulse-btn">
                   <svg class="icon icon-whatsapp" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.592 2.654-.696c1.02.571 1.813.784 2.806.784h.003c3.18 0 5.767-2.587 5.768-5.766.001-3.181-2.586-5.767-5.771-5.771zm7.42 5.766c-.001 4.093-3.332 7.424-7.423 7.424-1.255 0-2.484-.319-3.564-.925l-4.717 1.238 1.26-4.593c-.696-1.144-1.064-2.464-1.064-3.815.001-4.093 3.332-7.425 7.424-7.425 4.091 0 7.422 3.332 7.424 7.425z"/></svg>
                   <span>Reservar Esta Data via WhatsApp</span>
                 </button>
 
-                <div class="or-divider"><span>ou reserve pelo airbnb</span></div>
-
-                <a href="https://www.airbnb.com.br/rooms/1597439801435361378?guests=1&adults=1&s=67&unique_share_id=e0e79d63-2d7c-4f73-b2c6-f8e935d0dec6" id="btnAirbnbBooking" target="_blank" rel="noopener noreferrer" class="btn btn-airbnb btn-summary">
+                <a href="https://www.airbnb.com.br/rooms/1597439801435361378?guests=1&adults=1&s=67&unique_share_id=e0e79d63-2d7c-4f73-b2c6-f8e935d0dec6" id="btnAirbnbBooking" target="_blank" rel="noopener noreferrer" class="btn btn-airbnb btn-booking-action">
                   <svg class="icon icon-airbnb" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
                   <span>Ver Anúncio no Airbnb</span>
                 </a>
@@ -796,7 +797,103 @@
       </div>
     </section>
 
-    <!-- ==================== FAQ ==================== -->
+    <!-- ==================== CONTATOS, LOCALIZAÇÃO & REDES ==================== -->
+    <section class="section contact-section" id="contato">
+      <div class="container">
+        
+        <div class="contact-card">
+          <div class="contact-grid">
+            
+            <div class="contact-info">
+              <span class="section-tag">CENTRAL DE ATENDIMENTO</span>
+              <h2 class="contact-title">Vamos planejar sua festa no Piuss?</h2>
+              <p class="contact-desc">
+                Disponibilidade imediata para atendimento consultivo, agendamento rápido de visita e reserva da sua data.
+              </p>
+
+              <!-- Canais de Contato com botões alinhados ao layout (sem ícones circulares) -->
+              <div class="contact-channels">
+                
+                <!-- WhatsApp Oficial -->
+                <a href="https://wa.me/5511921422403?text=Ol%C3%A1!%20Gostaria%20de%20consultar%20uma%20data%20no%20Piuss." target="_blank" rel="noopener noreferrer" class="channel-link whatsapp-channel">
+                  <div class="channel-texts">
+                    <strong>WhatsApp Oficial de Atendimento</strong>
+                    <span>(11) 92142-2403 • Resposta rápida para orçamentos e agendamento de visitas</span>
+                  </div>
+                  <div class="channel-cta">
+                    <span class="btn btn-sm btn-whatsapp channel-cta-btn shadow-glow">Chamar no WhatsApp 📲</span>
+                  </div>
+                </a>
+
+                <!-- Instagram Oficial -->
+                <a href="https://www.instagram.com/seu.piuss/" target="_blank" rel="noopener noreferrer" class="channel-link instagram-channel">
+                  <div class="channel-texts">
+                    <strong>Instagram Oficial (@seu.piuss)</strong>
+                    <span>Fotos, bastidores e cobertura de eventos reais</span>
+                  </div>
+                  <div class="channel-cta">
+                    <span class="btn btn-sm btn-instagram channel-cta-btn">Seguir no Instagram 📸</span>
+                  </div>
+                </a>
+
+                <!-- Google Maps -->
+                <a href="https://share.google/geKV5Cpukdi5pftjX" target="_blank" rel="noopener noreferrer" class="channel-link address-channel">
+                  <div class="channel-texts">
+                    <strong>Localização: Rua Major Diogo, 518</strong>
+                    <span>Bela Vista, São Paulo - SP • A 5 min da Av. Paulista</span>
+                  </div>
+                  <div class="channel-cta">
+                    <span class="btn btn-sm btn-outline-amber channel-cta-btn">Abrir no Maps 📍</span>
+                  </div>
+                </a>
+
+              </div>
+
+              <!-- Anúncios Oficiais do Airbnb -->
+              <div class="other-platforms">
+                <span class="other-platforms-title">Anúncios Oficiais no Airbnb:</span>
+                <div class="platforms-badges">
+                  <a href="https://www.airbnb.com.br/rooms/1597439801435361378?guests=1&adults=1&s=67&unique_share_id=e0e79d63-2d7c-4f73-b2c6-f8e935d0dec6" target="_blank" rel="noopener noreferrer" class="platform-badge">
+                    <span>Casa Toda (Até 160) ↗</span>
+                  </a>
+                  <a href="https://www.airbnb.com.br/rooms/1618862847098039723?guests=1&adults=1&s=67&unique_share_id=6f9f4611-872f-46c4-8391-85737fd554a1" target="_blank" rel="noopener noreferrer" class="platform-badge">
+                    <span>Espaço Palco (Até 100) ↗</span>
+                  </a>
+                  <a href="https://www.airbnb.com.br/rooms/1652316286556122188?guests=1&adults=1&s=67&unique_share_id=91205b42-eb3b-4d89-a00f-32675e31c67e" target="_blank" rel="noopener noreferrer" class="platform-badge">
+                    <span>Salão Karaokê (Até 50) ↗</span>
+                  </a>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Mapa Interativo do Google Maps -->
+            <div class="contact-map-wrapper">
+              <div class="map-container">
+                <iframe 
+                  title="Localização do Piuss no Google Maps"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.172545564858!2d-46.6477169!3d-23.5559816!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce59a60e572887%3A0xe54d39bc15f8d67a!2sR.%20Major%20Diogo%2C%20518%20-%20Bela%20Vista%2C%20S%C3%A3o%20Paulo%20-%20SP!5e0!3m2!1spt-BR!2sbr!4v1697000000000!5m2!1spt-BR!2sbr" 
+                  width="100%" 
+                  height="100%" 
+                  style="border:0;" 
+                  allowfullscreen="" 
+                  loading="lazy" 
+                  referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+              </div>
+              <div class="map-badge">
+                <span class="pin-icon">📍</span>
+                <span>Rua Major Diogo, 518 — Bela Vista • Acesso fácil pela Av. 9 de Julho e Brigadeiro Luís Antônio</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== FAQ (ABAIXO DOS CONTATOS) ==================== -->
     <section class="section faq-section" id="faq">
       <div class="container faq-container">
         
@@ -896,111 +993,6 @@
             </div>
           </div>
 
-        </div>
-
-      </div>
-    </section>
-
-    <!-- ==================== CONTATOS, LOCALIZAÇÃO & REDES ==================== -->
-    <section class="section contact-section" id="contato">
-      <div class="container">
-        
-        <div class="contact-card">
-          <div class="contact-grid">
-            
-            <div class="contact-info">
-              <span class="section-tag">CENTRAL DE ATENDIMENTO</span>
-              <h2 class="contact-title">Vamos planejar sua festa no Piuss?</h2>
-              <p class="contact-desc">
-                Disponibilidade imediata para atendimento consultivo, agendamento rápido de visita e reserva da sua data.
-              </p>
-
-              <!-- Canais de Contato -->
-              <div class="contact-channels">
-                
-                <!-- WhatsApp Oficial -->
-                <a href="https://wa.me/5511921422403?text=Ol%C3%A1!%20Gostaria%20de%20consultar%20uma%20data%20no%20Piuss." target="_blank" rel="noopener noreferrer" class="channel-link whatsapp-channel">
-                  <div class="channel-icon">
-                    <svg viewBox="0 0 24 24" fill="currentColor" class="social-logo-svg"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.592 2.654-.696c1.02.571 1.813.784 2.806.784h.003c3.18 0 5.767-2.587 5.768-5.766.001-3.181-2.586-5.767-5.771-5.771zm7.42 5.766c-.001 4.093-3.332 7.424-7.423 7.424-1.255 0-2.484-.319-3.564-.925l-4.717 1.238 1.26-4.593c-.696-1.144-1.064-2.464-1.064-3.815.001-4.093 3.332-7.425 7.424-7.425 4.091 0 7.422 3.332 7.424 7.425z"/></svg>
-                  </div>
-                  <div class="channel-texts">
-                    <strong>WhatsApp Oficial de Atendimento</strong>
-                    <span>(11) 92142-2403 • Resposta rápida para orçamentos e agendamento de visitas</span>
-                  </div>
-                  <div class="channel-cta">
-                    <span class="btn btn-sm btn-whatsapp channel-cta-btn shadow-glow">Chamar no WhatsApp 📲</span>
-                  </div>
-                </a>
-
-                <!-- Instagram Oficial -->
-                <a href="https://www.instagram.com/seu.piuss/" target="_blank" rel="noopener noreferrer" class="channel-link instagram-channel">
-                  <div class="channel-icon">
-                    <svg viewBox="0 0 24 24" fill="currentColor" class="social-logo-svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                  </div>
-                  <div class="channel-texts">
-                    <strong>Instagram Oficial (@seu.piuss)</strong>
-                    <span>Fotos, bastidores e cobertura de eventos reais</span>
-                  </div>
-                  <div class="channel-cta">
-                    <span class="btn btn-sm btn-instagram channel-cta-btn">Seguir no Instagram 📸</span>
-                  </div>
-                </a>
-
-                <!-- Google Maps -->
-                <a href="https://share.google/geKV5Cpukdi5pftjX" target="_blank" rel="noopener noreferrer" class="channel-link address-channel">
-                  <div class="channel-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="social-logo-svg"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                  </div>
-                  <div class="channel-texts">
-                    <strong>Localização: Rua Major Diogo, 518</strong>
-                    <span>Bela Vista, São Paulo - SP • A 5 min da Av. Paulista</span>
-                  </div>
-                  <div class="channel-cta">
-                    <span class="btn btn-sm btn-outline-amber channel-cta-btn">Abrir no Maps 📍</span>
-                  </div>
-                </a>
-
-              </div>
-
-              <!-- Anúncios Oficiais do Airbnb -->
-              <div class="other-platforms">
-                <span class="other-platforms-title">Anúncios Oficiais no Airbnb:</span>
-                <div class="platforms-badges">
-                  <a href="https://www.airbnb.com.br/rooms/1597439801435361378?guests=1&adults=1&s=67&unique_share_id=e0e79d63-2d7c-4f73-b2c6-f8e935d0dec6" target="_blank" rel="noopener noreferrer" class="platform-badge">
-                    <span>Casa Toda (Até 160) ↗</span>
-                  </a>
-                  <a href="https://www.airbnb.com.br/rooms/1618862847098039723?guests=1&adults=1&s=67&unique_share_id=6f9f4611-872f-46c4-8391-85737fd554a1" target="_blank" rel="noopener noreferrer" class="platform-badge">
-                    <span>Espaço Palco (Até 100) ↗</span>
-                  </a>
-                  <a href="https://www.airbnb.com.br/rooms/1652316286556122188?guests=1&adults=1&s=67&unique_share_id=91205b42-eb3b-4d89-a00f-32675e31c67e" target="_blank" rel="noopener noreferrer" class="platform-badge">
-                    <span>Salão Karaokê (Até 50) ↗</span>
-                  </a>
-                </div>
-              </div>
-
-            </div>
-
-            <!-- Mapa Interativo do Google Maps -->
-            <div class="contact-map-wrapper">
-              <div class="map-container">
-                <iframe 
-                  title="Localização do Piuss no Google Maps"
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.172545564858!2d-46.6477169!3d-23.5559816!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce59a60e572887%3A0xe54d39bc15f8d67a!2sR.%20Major%20Diogo%2C%20518%20-%20Bela%20Vista%2C%20S%C3%A3o%20Paulo%20-%20SP!5e0!3m2!1spt-BR!2sbr!4v1697000000000!5m2!1spt-BR!2sbr" 
-                  width="100%" 
-                  height="100%" 
-                  style="border:0;" 
-                  allowfullscreen="" 
-                  loading="lazy" 
-                  referrerpolicy="no-referrer-when-downgrade">
-                </iframe>
-              </div>
-              <div class="map-badge">
-                <span class="pin-icon">📍</span>
-                <span>Rua Major Diogo, 518 — Bela Vista • Acesso fácil pela Av. 9 de Julho e Brigadeiro Luís Antônio</span>
-              </div>
-            </div>
-
-          </div>
         </div>
 
       </div>

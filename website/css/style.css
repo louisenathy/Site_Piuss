@@ -1442,13 +1442,61 @@ select.form-control option {
 }
 
 .duration-info-badge.has-extra {
-  background: rgba(224, 90, 43, 0.12);
-  border-color: rgba(224, 90, 43, 0.35);
-  color: #fed7aa;
+  background: rgba(239, 68, 68, 0.16);
+  border-color: #ef4444;
+  color: #fca5a5;
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.25);
 }
 
 .duration-info-badge.has-extra strong {
-  color: #ffedd5;
+  color: #ffffff;
+}
+
+.badge-duration-danger {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: rgba(239, 68, 68, 0.24);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.6);
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.duration-extra-notice {
+  font-size: 0.78rem;
+  color: #f87171;
+  font-weight: 700;
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px dashed rgba(239, 68, 68, 0.35);
+}
+
+.duration-info-badge.has-remaining {
+  background: rgba(14, 165, 233, 0.14);
+  border-color: rgba(14, 165, 233, 0.45);
+  color: #bae6fd;
+}
+
+.badge-duration-remaining {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(14, 165, 233, 0.22);
+  color: #38bdf8;
+  border: 1px solid rgba(14, 165, 233, 0.45);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.duration-remaining-notice {
+  font-size: 0.77rem;
+  color: #7dd3fc;
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px dashed rgba(14, 165, 233, 0.25);
 }
 
 /* Quadro de Regras Comerciais Aplicadas - Layout Limpo e Claro */
@@ -1556,6 +1604,28 @@ select.form-control option {
   border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
+.badge-rule-danger {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.5);
+}
+
+.badge-rule-remaining {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  background: rgba(14, 165, 233, 0.18);
+  color: #38bdf8;
+  border: 1px solid rgba(14, 165, 233, 0.4);
+}
+
 .badge-rule-warn {
   display: inline-block;
   padding: 2px 8px;
@@ -1636,9 +1706,9 @@ select.form-control option {
 }
 
 .fee-row-badge.badge-extra {
-  background: rgba(243, 179, 68, 0.18);
-  color: #f3b344;
-  border: 1px solid rgba(243, 179, 68, 0.3);
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.5);
 }
 
 .fee-row-badge.badge-free {
@@ -1654,45 +1724,39 @@ select.form-control option {
 }
 
 .fee-row.fee-row-extra {
-  background: rgba(224, 90, 43, 0.08);
-  padding: 8px 10px;
+  background: rgba(239, 68, 68, 0.08);
+  padding: 8px 12px;
   border-radius: 8px;
-  border: 1px dashed rgba(224, 90, 43, 0.35);
+  border: 1px dashed rgba(239, 68, 68, 0.45);
 }
 
 .fee-row.fee-row-extra .fee-row-name {
-  color: #ffedd5;
+  color: #fca5a5;
   font-weight: 700;
 }
 
 .fee-row.fee-row-extra .fee-row-value {
-  color: #f3b344;
+  color: #ef4444;
 }
 
-/* Resumo da Simulação */
+/* Resumo da Simulação (Estimativa Consolidada & Somatório Detalhado) */
 .simulator-summary-box {
   background: rgba(15, 16, 19, 0.95);
   border: 1px solid rgba(243, 179, 68, 0.35);
   border-radius: var(--radius-lg);
   padding: 28px 32px;
-  display: flex;
-  align-items: stretch;
-  justify-content: space-between;
-  gap: 32px;
+  margin-bottom: 24px;
 }
 
 @media (max-width: 900px) {
   .simulator-summary-box {
-    flex-direction: column;
-    align-items: stretch;
     padding: 22px 18px;
-    gap: 24px;
+    margin-bottom: 20px;
   }
 }
 
 .summary-details {
-  flex: 1;
-  min-width: 0;
+  width: 100%;
 }
 
 .summary-label {
@@ -1707,7 +1771,7 @@ select.form-control option {
   display: flex;
   align-items: baseline;
   gap: 6px;
-  margin: 6px 0 10px 0;
+  margin: 10px 0 12px 0;
 }
 
 .summary-price-wrapper .currency {
@@ -1735,26 +1799,66 @@ select.form-control option {
   line-height: 1.4;
 }
 
-.summary-action {
-  width: 320px;
-  flex-shrink: 0;
+/* Campo de Texto Opcional Adicional (Abaixo da estimativa de valor) */
+.optional-notes-box {
+  background: var(--color-bg-surface-elevated);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-md);
+  padding: 18px 22px;
+  margin-bottom: 20px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 12px;
+  gap: 10px;
 }
 
-@media (max-width: 900px) {
-  .summary-action {
-    width: 100%;
+.optional-notes-label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  line-height: 1.4;
+}
+
+.optional-notes-input {
+  width: 100%;
+  resize: vertical;
+  min-height: 60px;
+  font-size: 0.9rem;
+  background: rgba(10, 11, 14, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.optional-notes-input:focus {
+  border-color: var(--color-amber);
+  box-shadow: 0 0 0 3px rgba(224, 90, 43, 0.2);
+}
+
+/* Ações do Simulador (Alinhadas diretamente abaixo do campo de texto a mais) */
+.simulator-actions-wrapper {
+  margin-top: 10px;
+}
+
+.simulator-actions-row {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 16px;
+  align-items: stretch;
+}
+
+@media (max-width: 768px) {
+  .simulator-actions-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
   }
 }
 
-.btn-summary {
+.btn-booking-action {
   width: 100%;
-  min-height: 52px;
-  padding: 12px 18px;
-  font-size: 0.95rem;
+  min-height: 54px;
+  padding: 14px 22px;
+  font-size: 1rem;
   font-weight: 700;
   border-radius: var(--radius-full);
   display: inline-flex;
@@ -1768,34 +1872,14 @@ select.form-control option {
   word-break: normal;
   line-height: 1.25;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
   transition: var(--transition-smooth);
 }
 
-.btn-summary .icon {
-  width: 20px;
-  height: 20px;
+.btn-booking-action .icon {
+  width: 22px;
+  height: 22px;
   flex-shrink: 0;
-}
-
-.or-divider {
-  display: flex;
-  align-items: center;
-  text-align: center;
-  margin: 2px 0;
-  color: var(--color-text-muted);
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  gap: 10px;
-}
-
-.or-divider::before,
-.or-divider::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: rgba(255, 255, 255, 0.12);
 }
 
 .pulse-btn {
@@ -2202,11 +2286,12 @@ select.form-control option {
 .channel-link {
   display: flex;
   align-items: center;
-  gap: 16px;
+  justify-content: space-between;
+  gap: 24px;
   background: var(--color-bg-surface-elevated);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  padding: 16px 20px;
+  padding: 18px 26px;
   transition: var(--transition-smooth);
   text-decoration: none;
 }
@@ -2217,41 +2302,6 @@ select.form-control option {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
-.channel-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.channel-icon svg,
-.social-logo-svg {
-  width: 24px;
-  height: 24px;
-  flex-shrink: 0;
-}
-
-.whatsapp-channel .channel-icon {
-  background: rgba(37, 211, 102, 0.18);
-  color: #25d366;
-  border: 1px solid rgba(37, 211, 102, 0.4);
-}
-
-.instagram-channel .channel-icon {
-  background: linear-gradient(135deg, rgba(131, 58, 180, 0.25) 0%, rgba(225, 48, 108, 0.25) 50%, rgba(253, 29, 29, 0.25) 100%);
-  color: #e1306c;
-  border: 1px solid rgba(225, 48, 108, 0.4);
-}
-
-.address-channel .channel-icon {
-  background: rgba(243, 179, 68, 0.18);
-  color: var(--color-gold);
-  border: 1px solid rgba(243, 179, 68, 0.4);
-}
-
 .channel-texts {
   flex: 1;
   display: flex;
@@ -2260,14 +2310,15 @@ select.form-control option {
 }
 
 .channel-texts strong {
-  font-size: 0.95rem;
+  font-size: 1rem;
   color: #fff;
-  margin-bottom: 2px;
+  margin-bottom: 4px;
 }
 
 .channel-texts span {
-  font-size: 0.8rem;
+  font-size: 0.84rem;
   color: var(--color-text-secondary);
+  line-height: 1.45;
 }
 
 .channel-cta {
@@ -2275,15 +2326,18 @@ select.form-control option {
 }
 
 .channel-cta-btn {
-  font-size: 0.82rem;
+  font-size: 0.86rem;
   font-weight: 700;
-  padding: 10px 18px;
+  padding: 12px 24px;
+  min-width: 180px;
   border-radius: var(--radius-full);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   white-space: nowrap;
   letter-spacing: 0.02em;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  text-align: center;
 }
 
 .btn-instagram {
@@ -2299,18 +2353,18 @@ select.form-control option {
   box-shadow: 0 6px 20px rgba(225, 48, 108, 0.45);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 700px) {
   .channel-link {
-    flex-wrap: wrap;
-    gap: 12px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+    padding: 18px 16px;
   }
   .channel-cta {
     width: 100%;
-    margin-top: 4px;
   }
   .channel-cta-btn {
     width: 100%;
-    text-align: center;
   }
 }
 

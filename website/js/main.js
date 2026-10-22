@@ -208,32 +208,55 @@ document.addEventListener('DOMContentLoaded', () => {
       modalityLimitBadge.textContent = `(Capacidade máxima: ${mod.label})`;
     }
 
-    // Badge com informação dinâmica de duração e horas adicionais
+    // Badge com informação dinâmica de duração, horas sobrando no pacote base e horas adicionais em vermelho
     if (durationInfoBadge) {
       const hasExtra = totalExtraHours > 0;
+      const isUnderPackage = durationHours < mod.packageHours;
+      const remainingHours = mod.packageHours - durationHours;
+
       if (hasExtra) {
         durationInfoBadge.classList.add('has-extra');
-      } else {
+        durationInfoBadge.classList.remove('has-remaining');
+      } else if (isUnderPackage) {
+        durationInfoBadge.classList.add('has-remaining');
         durationInfoBadge.classList.remove('has-extra');
+      } else {
+        durationInfoBadge.classList.remove('has-extra', 'has-remaining');
       }
 
       let curfewNotice = '';
       if (curfewExtraHours > 0) {
-        curfewNotice = `(A casa encerra às 02h. Encerramento às ${endTimeStr} acarreta hora adicional).`;
+        curfewNotice = `A casa encerra às 02h. Encerramento às ${endTimeStr} acarreta hora adicional (+R$ ${(curfewExtraHours * 200).toLocaleString('pt-BR')}).`;
       } else if (extraHoursFromDuration > 0) {
-        curfewNotice = `(Duração de ${durationHours}h excede o pacote base de ${mod.packageHours}h).`;
+        curfewNotice = `Duração de ${durationHours}h excede o pacote base de ${mod.packageHours}h (+${extraHoursFromDuration}h adicionais a R$ 200/h).`;
       }
 
-      durationInfoBadge.innerHTML = `
-        <div class="flex items-center justify-between flex-wrap gap-1">
-          <span>⏱️ Duração: <strong>${durationHours} horas</strong> (${startTimeStr} às ${endTimeStr}) • Pacote base: <strong>${mod.packageHours}h inclusas</strong>.</span>
-          ${hasExtra 
-            ? `<strong class="text-amber-400 font-bold">+${totalExtraHours}h adicionais (R$ ${extraHourCost.toLocaleString('pt-BR')})</strong>` 
-            : `<span class="text-emerald-400 font-semibold">✓ Sem horas adicionais</span>`
-          }
-        </div>
-        ${curfewNotice ? `<div class="text-xs text-amber-200 mt-1">${curfewNotice}</div>` : ''}
-      `;
+      if (hasExtra) {
+        durationInfoBadge.innerHTML = `
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <span>⏱️ Duração: <strong>${durationHours} horas</strong> (${startTimeStr} às ${endTimeStr}) • Pacote base: <strong>${mod.packageHours}h inclusas</strong>.</span>
+            <span class="badge-duration-danger">⚠️ +${totalExtraHours}h adicionais (+R$ ${extraHourCost.toLocaleString('pt-BR')})</span>
+          </div>
+          ${curfewNotice ? `<div class="duration-extra-notice">🚨 ${curfewNotice}</div>` : ''}
+        `;
+      } else if (isUnderPackage) {
+        durationInfoBadge.innerHTML = `
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <span>⏱️ Duração: <strong>${durationHours} horas</strong> (${startTimeStr} às ${endTimeStr}) • Pacote base: <strong>${mod.packageHours}h inclusas</strong>.</span>
+            <span class="badge-duration-remaining">💡 Restam ${remainingHours}h sobrando no pacote base</span>
+          </div>
+          <div class="duration-remaining-notice">
+            Você selecionou ${durationHours}h. Ainda tem <strong>${remainingHours}h disponíveis</strong> no seu pacote base de ${mod.packageHours}h sem nenhum custo adicional!
+          </div>
+        `;
+      } else {
+        durationInfoBadge.innerHTML = `
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <span>⏱️ Duração: <strong>${durationHours} horas</strong> (${startTimeStr} às ${endTimeStr}) • Pacote base: <strong>${mod.packageHours}h inclusas</strong>.</span>
+            <span class="text-emerald-400 font-semibold">✓ ${mod.packageHours}h corridas (duração exata do pacote base)</span>
+          </div>
+        `;
+      }
     }
 
     let guests = parseInt(guestCountInput.value, 10);
@@ -293,7 +316,7 @@ document.addEventListener('DOMContentLoaded', () => {
         name: `Horas Adicionais (${totalExtraHours}h extras)`,
         detail: `Fórmula: ${totalExtraHours} hora(s) adicional(is) × R$ 200/h (${extraReason})`,
         badge: `+${totalExtraHours}h adicionais`,
-        badgeClass: 'badge-extra',
+        badgeClass: 'badge-extra badge-danger',
         value: extraHourCost,
         isExtra: true
       });
@@ -345,6 +368,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Renderiza o somatório detalhado das taxas com o quadrante limpo e claro
     if (feeBreakdownCard) {
+      const remainingHours = mod.packageHours - durationHours;
       const rulesHtml = `
         <div class="rules-summary-box">
           <div class="rules-header">
@@ -360,8 +384,11 @@ document.addEventListener('DOMContentLoaded', () => {
               <p class="rule-card-desc"><strong>${mod.name}</strong> • Pacote padrão de <strong>${mod.packageHours}h corridas</strong>.</p>
               <div class="rule-card-status">
                 ${extraHoursFromDuration > 0 
-                  ? `<span class="badge-rule-warn">+${extraHoursFromDuration}h além do pacote</span>` 
-                  : `<span class="badge-rule-ok">✓ Duração dentro do pacote base</span>`
+                  ? `<span class="badge-rule-danger">⚠️ +${extraHoursFromDuration}h além do pacote</span>` 
+                  : (durationHours < mod.packageHours
+                      ? `<span class="badge-rule-remaining">💡 ${remainingHours}h sobrando no pacote base</span>`
+                      : `<span class="badge-rule-ok">✓ Duração dentro do pacote base</span>`
+                    )
                 }
               </div>
             </div>
@@ -374,7 +401,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <p class="rule-card-desc">A casa encerra às <strong>02:00</strong>. Encerramento a partir das 02h conta horas adicionais (R$ 200/h).</p>
               <div class="rule-card-status">
                 ${curfewExtraHours > 0 
-                  ? `<span class="badge-rule-warn">+${curfewExtraHours}h pós-02h (+R$ ${(curfewExtraHours * 200).toLocaleString('pt-BR')})</span>` 
+                  ? `<span class="badge-rule-danger">⚠️ +${curfewExtraHours}h pós-02h (+R$ ${(curfewExtraHours * 200).toLocaleString('pt-BR')})</span>` 
                   : `<span class="badge-rule-ok">✓ Encerramento até 02:00 (sem taxa extra)</span>`
                 }
               </div>
@@ -388,8 +415,11 @@ document.addEventListener('DOMContentLoaded', () => {
               <p class="rule-card-desc">Horário: <strong>${startTimeStr} às ${endTimeStr}</strong> (total: <strong>${durationHours} horas</strong>).</p>
               <div class="rule-card-status">
                 ${totalExtraHours > 0 
-                  ? `<span class="badge-rule-warn">+${totalExtraHours}h adicionais no total (+R$ ${extraHourCost.toLocaleString('pt-BR')})</span>` 
-                  : `<span class="badge-rule-ok">✓ Nenhuma hora adicional calculada</span>`
+                  ? `<span class="badge-rule-danger">⚠️ +${totalExtraHours}h adicionais (+R$ ${extraHourCost.toLocaleString('pt-BR')})</span>` 
+                  : (durationHours < mod.packageHours
+                      ? `<span class="badge-rule-remaining">💡 ${remainingHours}h disponíveis para usar</span>`
+                      : `<span class="badge-rule-ok">✓ Nenhuma hora adicional calculada</span>`
+                    )
                 }
               </div>
             </div>
