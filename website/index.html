@@ -142,11 +142,13 @@
     </div>
   </header>
 
-  <!-- Indicador Flutuante da Seção Ativa no Mobile (Transição Suave) -->
-  <div id="mobileSectionIndicator" class="mobile-section-indicator" aria-live="polite">
-    <span class="indicator-icon">📍</span>
-    <span class="indicator-text" id="mobileIndicatorText">O Espaço</span>
-  </div>
+  <!-- Indicador Flutuante da Seção Ativa no Mobile (Transição Suave & Feedback Visual) -->
+  <button id="mobileSectionIndicator" class="mobile-section-indicator" aria-label="Seção atual. Toque para abrir menu de seções" aria-live="polite">
+    <span class="indicator-icon" id="mobileIndicatorIcon">✨</span>
+    <span class="indicator-text" id="mobileIndicatorText">1. O Espaço</span>
+    <span class="indicator-step" id="mobileIndicatorStep">1/8</span>
+    <span class="indicator-arrow" aria-hidden="true">▾</span>
+  </button>
 
   <main id="main-content">
     

@@ -79,17 +79,19 @@ document.addEventListener('DOMContentLoaded', () => {
   const mobileDrawerClose = document.getElementById('mobileDrawerClose');
   const mobileSectionIndicator = document.getElementById('mobileSectionIndicator');
   const mobileIndicatorText = document.getElementById('mobileIndicatorText');
+  const mobileIndicatorIcon = document.getElementById('mobileIndicatorIcon');
+  const mobileIndicatorStep = document.getElementById('mobileIndicatorStep');
 
-  const sectionTitles = {
-    'espaco': '1. O Espaço',
-    'estrutura': '2. Estrutura',
-    'modalidades': '3. Modalidades',
-    'galeria': '4. Galeria de Fotos',
-    'calendario': '5. Calendário Airbnb',
-    'simulador': '6. Simular Reserva',
-    'contato': '7. Contatos',
-    'faq': '8. Perguntas Frequentes'
-  };
+  const spySections = [
+    { id: 'espaco', target: 'espaco', title: '1. O Espaço', icon: '✨', step: '1/8' },
+    { id: 'estrutura', target: 'estrutura', title: '2. Estrutura', icon: '🎸', step: '2/8' },
+    { id: 'modalidades', target: 'modalidades', title: '3. Modalidades', icon: '🏢', step: '3/8' },
+    { id: 'galeria', target: 'galeria', title: '4. Galeria de Fotos', icon: '📸', step: '4/8' },
+    { id: 'calendario', target: 'calendario', title: '5. Calendário Airbnb', icon: '📅', step: '5/8' },
+    { id: 'simulador', target: 'simulador', title: '6. Simular Reserva', icon: '⚡', step: '6/8' },
+    { id: 'contato', target: 'contato', title: '7. Contatos', icon: '📞', step: '7/8' },
+    { id: 'faq', target: 'faq', title: '8. Perguntas Frequentes', icon: '❓', step: '8/8' }
+  ];
 
   function closeMobileDrawer() {
     if (!mobileDrawer) return;
@@ -135,6 +137,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Ao clicar no indicador flutuante no mobile, abre o menu de seções
+  if (mobileSectionIndicator) {
+    mobileSectionIndicator.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (mobileDrawer && mobileDrawer.classList.contains('open')) {
+        closeMobileDrawer();
+      } else {
+        openMobileDrawer();
+      }
+    });
+  }
+
   // Smooth scroll handler com compensação exata e independente do estado do menu
   function smoothScrollToSection(targetSelector) {
     const targetEl = document.querySelector(targetSelector);
@@ -149,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Interceptar cliques em botões de navegação para rolagem fluida e precisa
+  // Interceptar cliques em botões de navegação para rolagem fluida e efeito sutil de slide/fade no mobile
   document.querySelectorAll('.nav-btn, .mobile-nav-btn, a[href^="#"]').forEach(link => {
     link.addEventListener('click', (e) => {
       const href = link.getAttribute('href');
@@ -157,98 +172,161 @@ document.addEventListener('DOMContentLoaded', () => {
         const targetEl = document.querySelector(href);
         if (targetEl) {
           e.preventDefault();
+          const isMobileNav = link.classList.contains('mobile-nav-btn') || window.innerWidth <= 900;
           closeMobileDrawer();
+          
+          const targetId = href.replace('#', '');
+          
           setTimeout(() => {
             smoothScrollToSection(href);
+            
+            // Aplica efeito sutil de slide & fade na seção de destino no mobile
+            if (isMobileNav) {
+              // Remove de todas para garantir que apenas o destino anime
+              document.querySelectorAll('.section-nav-transition').forEach(el => el.classList.remove('section-nav-transition'));
+              void targetEl.offsetWidth; // Força reflow para reiniciar animação
+              targetEl.classList.add('section-nav-transition');
+              setTimeout(() => {
+                targetEl.classList.remove('section-nav-transition');
+              }, 1200);
+            }
           }, 40);
           
-          if (link.classList.contains('nav-btn')) {
-            navButtons.forEach(b => b.classList.remove('active'));
-            link.classList.add('active');
-          }
+          updateActiveSectionUI(targetId);
         }
       }
     });
   });
 
-  // Scroll Spy: Destaca o botão correspondente e anima transição no mobile
-  const spySections = [
-    { id: 'espaco', target: 'espaco' },
-    { id: 'estrutura', target: 'estrutura' },
-    { id: 'modalidades', target: 'modalidades' },
-    { id: 'galeria', target: 'galeria' },
-    { id: 'calendario', target: 'calendario' },
-    { id: 'simulador', target: 'simulador' },
-    { id: 'contato', target: 'contato' },
-    { id: 'faq', target: 'faq' }
-  ];
+  // ==========================================
+  // INTERSECTION OBSERVER & SECTION SPY
+  // ==========================================
+  let activeSectionId = '';
+  let indicatorAnimationTimeout = null;
 
-  let lastActiveSectionId = '';
+  function updateActiveSectionUI(currentSectionId) {
+    if (!currentSectionId || currentSectionId === activeSectionId) return;
+    activeSectionId = currentSectionId;
 
-  function updateActiveNavOnScroll() {
-    const scrollPos = window.scrollY + 140;
-    let currentSectionId = '';
+    const secMeta = spySections.find(s => s.id === currentSectionId) || {
+      id: currentSectionId,
+      title: currentSectionId,
+      icon: '📍',
+      step: ''
+    };
 
-    spySections.forEach(sec => {
-      const el = document.getElementById(sec.id);
-      if (el) {
-        const top = el.offsetTop;
-        const height = el.offsetHeight;
-        if (scrollPos >= top && scrollPos < top + height) {
-          currentSectionId = sec.target;
+    // 1. Atualiza botões da barra desktop
+    navButtons.forEach(btn => {
+      if (btn.getAttribute('data-target') === currentSectionId) {
+        btn.classList.add('active');
+        btn.setAttribute('aria-current', 'page');
+      } else {
+        btn.classList.remove('active');
+        btn.removeAttribute('aria-current');
+      }
+    });
+
+    // 2. Atualiza botões no drawer mobile
+    document.querySelectorAll('.mobile-nav-btn').forEach(mBtn => {
+      if (mBtn.getAttribute('data-target') === currentSectionId) {
+        mBtn.classList.add('active');
+        mBtn.setAttribute('aria-current', 'page');
+      } else {
+        mBtn.classList.remove('active');
+        mBtn.removeAttribute('aria-current');
+      }
+    });
+
+    // 3. Atualiza destaque visual na seção ativa do documento
+    spySections.forEach(s => {
+      const sEl = document.getElementById(s.id);
+      if (sEl) {
+        if (s.id === currentSectionId) {
+          sEl.classList.add('section-active');
+        } else {
+          sEl.classList.remove('section-active');
         }
       }
     });
 
-    if (currentSectionId) {
-      // Atualiza botões desktop
-      navButtons.forEach(btn => {
-        if (btn.getAttribute('data-target') === currentSectionId) {
-          btn.classList.add('active');
-        } else {
-          btn.classList.remove('active');
-        }
-      });
-
-      // Atualiza botões no drawer mobile
-      document.querySelectorAll('.mobile-nav-btn').forEach(mBtn => {
-        if (mBtn.getAttribute('data-target') === currentSectionId) {
-          mBtn.classList.add('active');
-        } else {
-          mBtn.classList.remove('active');
-        }
-      });
-
-      // Transição visual perceptível no mobile ao trocar de seção
-      if (currentSectionId !== lastActiveSectionId) {
-        lastActiveSectionId = currentSectionId;
-        
-        // Destaque visual da seção ativa
-        spySections.forEach(s => {
-          const sEl = document.getElementById(s.id);
-          if (sEl) {
-            if (s.id === currentSectionId) {
-              sEl.classList.add('section-active');
-            } else {
-              sEl.classList.remove('section-active');
-            }
-          }
-        });
-
-        if (mobileSectionIndicator && mobileIndicatorText) {
-          mobileIndicatorText.textContent = sectionTitles[currentSectionId] || currentSectionId;
-          mobileSectionIndicator.classList.add('section-changed');
-          setTimeout(() => {
-            mobileSectionIndicator.classList.remove('section-changed');
-          }, 1200);
-        }
+    // 4. Atualiza o indicador flutuante no mobile (#mobileSectionIndicator)
+    if (mobileSectionIndicator) {
+      if (mobileIndicatorText) {
+        mobileIndicatorText.textContent = secMeta.title;
       }
-    } else if (window.scrollY < 300) {
-      navButtons.forEach(btn => btn.classList.remove('active'));
+      if (mobileIndicatorIcon && secMeta.icon) {
+        mobileIndicatorIcon.textContent = secMeta.icon;
+      }
+      if (mobileIndicatorStep && secMeta.step) {
+        mobileIndicatorStep.textContent = secMeta.step;
+      }
+
+      // Reinicia a animação de feedback visual no mobile
+      mobileSectionIndicator.classList.remove('section-changed');
+      // Forçar reflow para reiniciar animação CSS suavemente
+      void mobileSectionIndicator.offsetWidth;
+      mobileSectionIndicator.classList.add('section-changed');
+
+      if (indicatorAnimationTimeout) clearTimeout(indicatorAnimationTimeout);
+      indicatorAnimationTimeout = setTimeout(() => {
+        mobileSectionIndicator.classList.remove('section-changed');
+      }, 1400);
     }
   }
 
-  window.addEventListener('scroll', updateActiveNavOnScroll, { passive: true });
+  // IntersectionObserver para atualizar #mobileSectionIndicator dinamicamente conforme rolagem
+  if ('IntersectionObserver' in window) {
+    const visibleSectionRatios = new Map();
+
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          visibleSectionRatios.set(entry.target.id, entry.intersectionRatio);
+        } else {
+          visibleSectionRatios.delete(entry.target.id);
+        }
+      });
+
+      // Se o usuário rolou para o topo da página, define a 1ª seção (Espaço)
+      if (window.scrollY < 120) {
+        updateActiveSectionUI('espaco');
+        return;
+      }
+
+      // Escolhe a seção que tem a maior presença na área de leitura
+      if (visibleSectionRatios.size > 0) {
+        let maxRatio = -1;
+        let bestSectionId = '';
+        visibleSectionRatios.forEach((ratio, secId) => {
+          if (ratio > maxRatio) {
+            maxRatio = ratio;
+            bestSectionId = secId;
+          }
+        });
+        if (bestSectionId) {
+          updateActiveSectionUI(bestSectionId);
+        }
+      }
+    }, {
+      root: null,
+      rootMargin: '-74px 0px -35% 0px',
+      threshold: [0, 0.1, 0.2, 0.35, 0.5, 0.7, 0.85]
+    });
+
+    spySections.forEach(sec => {
+      const el = document.getElementById(sec.id);
+      if (el) {
+        sectionObserver.observe(el);
+      }
+    });
+  }
+
+  // Scroll listener complementar para garantir precisão no topo e fim da página
+  window.addEventListener('scroll', () => {
+    if (window.scrollY < 100) {
+      updateActiveSectionUI('espaco');
+    }
+  }, { passive: true });
 
   // ==========================================
   // 2. SIMULADOR DE RESERVA AUTOMÁTICA
