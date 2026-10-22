@@ -58,34 +58,110 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================
-  // 1. HEADER SCROLL & MOBILE DRAWER
+  // 1. HEADER SCROLL, BOTÕES DE ROLAGEM & MOBILE DRAWER
   // ==========================================
   const header = document.getElementById('header');
   const mobileToggle = document.getElementById('mobileToggle');
   const mobileDrawer = document.getElementById('mobileDrawer');
-  const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+  const navButtons = document.querySelectorAll('.nav-btn');
+  const mobileNavButtons = document.querySelectorAll('.mobile-nav-btn, .mobile-nav-link');
 
+  // Sticky Header Blur & Shadow on Scroll
   window.addEventListener('scroll', () => {
-    if (window.scrollY > 40) {
+    if (window.scrollY > 30) {
       header.classList.add('scrolled');
     } else {
       header.classList.remove('scrolled');
     }
-  });
+  }, { passive: true });
 
+  // Mobile Drawer Toggle
   if (mobileToggle && mobileDrawer) {
     mobileToggle.addEventListener('click', () => {
       mobileToggle.classList.toggle('active');
       mobileDrawer.classList.toggle('open');
     });
 
-    mobileNavLinks.forEach(link => {
-      link.addEventListener('click', () => {
+    mobileNavButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
         mobileToggle.classList.remove('active');
         mobileDrawer.classList.remove('open');
       });
     });
   }
+
+  // Smooth scroll handler com compensação exata do cabeçalho fixo
+  function smoothScrollToSection(targetSelector) {
+    const targetEl = document.querySelector(targetSelector);
+    if (!targetEl) return;
+    const headerHeight = header ? header.offsetHeight : 80;
+    const elementTop = targetEl.getBoundingClientRect().top + window.pageYOffset;
+    const offsetPosition = elementTop - headerHeight + 2;
+
+    window.scrollTo({
+      top: Math.max(0, offsetPosition),
+      behavior: 'smooth'
+    });
+  }
+
+  // Interceptar cliques em botões de navegação para rolagem fluida e precisa
+  document.querySelectorAll('.nav-btn, .mobile-nav-btn, a[href^="#"]').forEach(link => {
+    link.addEventListener('click', (e) => {
+      const href = link.getAttribute('href');
+      if (href && href.startsWith('#') && href.length > 1) {
+        const targetEl = document.querySelector(href);
+        if (targetEl) {
+          e.preventDefault();
+          smoothScrollToSection(href);
+          
+          if (link.classList.contains('nav-btn')) {
+            navButtons.forEach(b => b.classList.remove('active'));
+            link.classList.add('active');
+          }
+        }
+      }
+    });
+  });
+
+  // Scroll Spy: Destaca o botão correspondente conforme a rolagem da página
+  const spySections = [
+    { id: 'experiencia', target: 'experiencia' },
+    { id: 'galeria', target: 'galeria' },
+    { id: 'estrutura', target: 'estrutura' },
+    { id: 'simulador', target: 'simulador' },
+    { id: 'calendario', target: 'calendario' },
+    { id: 'contato', target: 'contato' }
+  ];
+
+  function updateActiveNavOnScroll() {
+    const scrollPos = window.scrollY + 140;
+    let currentSectionId = '';
+
+    spySections.forEach(sec => {
+      const el = document.getElementById(sec.id);
+      if (el) {
+        const top = el.offsetTop;
+        const height = el.offsetHeight;
+        if (scrollPos >= top && scrollPos < top + height) {
+          currentSectionId = sec.target;
+        }
+      }
+    });
+
+    if (currentSectionId) {
+      navButtons.forEach(btn => {
+        if (btn.getAttribute('data-target') === currentSectionId) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+    } else if (window.scrollY < 300) {
+      navButtons.forEach(btn => btn.classList.remove('active'));
+    }
+  }
+
+  window.addEventListener('scroll', updateActiveNavOnScroll, { passive: true });
 
   // ==========================================
   // 2. SIMULADOR DE RESERVA AUTOMÁTICA
@@ -111,10 +187,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // Regras de Capacidade e Pacote Base por Modalidade
   // - Principal (Casa Toda) e Palco: Pacote de 8 horas
   // - Karaokê: Pacote de 6 horas
+  // Regras de Capacidade e Pacote Base por Modalidade (8h padrão de pacote base)
   const MODALITY_LIMITS = {
     casaToda: { max: 160, label: 'até 160 pessoas em pé', multiplier: 1.15, url: CONFIG.airbnbUrls.casaToda, name: 'Casa Toda (Térreo + Superior)', packageHours: 8 },
     espacoPalco: { max: 100, label: 'até 100 pessoas em pé', multiplier: 0.85, url: CONFIG.airbnbUrls.espacoPalco, name: 'Espaço Palco (Térreo)', packageHours: 8 },
-    salaoKaraoke: { max: 50, label: 'até 50 pessoas sentadas', multiplier: 0.75, url: CONFIG.airbnbUrls.salaoKaraoke, name: 'Salão Karaokê (Piso Superior)', packageHours: 6 }
+    salaoKaraoke: { max: 50, label: 'até 50 pessoas sentadas', multiplier: 0.75, url: CONFIG.airbnbUrls.salaoKaraoke, name: 'Salão Karaokê (Piso Superior)', packageHours: 8 }
   };
 
   function getCurrentModalityConfig() {
@@ -154,10 +231,10 @@ document.addEventListener('DOMContentLoaded', () => {
     return parts[0] * 60 + (parts[1] || 0);
   }
 
-  // Calcula duração e horas adicionais
-  // Regra 1: Horas que excedem o pacote base (8h ou 6h)
-  // Regra 2: A casa encerra às 02h. Se selecionar encerramento igual ou maior que 02h, calculam-se horas adicionais em todos os casos (R$ 200/h)
-  function getEventTimingDetails(startTimeStr, endTimeStr, basePackageHours) {
+  // Calcula duração e horas adicionais automaticamente
+  // Regra 1: Duração superior às 8h base do pacote
+  // Regra 2: Encerramento da casa após 02h conta horas adicionais
+  function getEventTimingDetails(startTimeStr, endTimeStr, basePackageHours = 8) {
     const startMins = parseTimeToMinutes(startTimeStr || '18:00');
     let endMins = parseTimeToMinutes(endTimeStr || '02:00');
 
@@ -169,18 +246,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const durationMins = endMins - startMins;
     const durationHours = Math.round((durationMins / 60) * 10) / 10;
 
-    // Regra do pacote base
+    // Horas que ultrapassam as 8h base
     const extraHoursFromDuration = Math.max(0, Math.ceil(durationHours - basePackageHours));
 
     // Regra do encerramento da casa às 02h (26h ou 1560 minutos)
-    // Se selecionou encerramento igual ou maior que 02h da madrugada:
     let curfewExtraHours = 0;
     const curfewMins = 26 * 60; // 02:00 da madrugada
     if (endMins >= curfewMins) {
       curfewExtraHours = Math.ceil((endMins - curfewMins) / 60) + 1;
     }
 
-    // O total de horas adicionais considera a maior demanda entre estender além do pacote e estender após o limite da casa
+    // Total de horas adicionais necessárias
     const totalExtraHours = Math.max(extraHoursFromDuration, curfewExtraHours);
 
     return {
@@ -203,16 +279,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const extraHourRate = 200;
     const extraHourCost = totalExtraHours * extraHourRate;
 
-    // Atualiza limites e badge de capacidade (sem duplicar horas)
+    // Atualiza limites e badge de capacidade
     if (modalityLimitBadge) {
       modalityLimitBadge.textContent = `(Capacidade máxima: ${mod.label})`;
     }
 
-    // Badge com informação dinâmica de duração, horas sobrando no pacote base e horas adicionais em vermelho
+    // Badge com recálculo automático de duração e ALERTA VISUAL EM VERMELHO se exceder 8h base
     if (durationInfoBadge) {
-      const hasExtra = totalExtraHours > 0;
-      const isUnderPackage = durationHours < mod.packageHours;
-      const remainingHours = mod.packageHours - durationHours;
+      const hasExtra = totalExtraHours > 0 || durationHours > 8;
+      const isUnderPackage = durationHours < 8;
+      const remainingHours = 8 - durationHours;
 
       if (hasExtra) {
         durationInfoBadge.classList.add('has-extra');
@@ -224,36 +300,34 @@ document.addEventListener('DOMContentLoaded', () => {
         durationInfoBadge.classList.remove('has-extra', 'has-remaining');
       }
 
-      let curfewNotice = '';
-      if (curfewExtraHours > 0) {
-        curfewNotice = `A casa encerra às 02h. Encerramento às ${endTimeStr} acarreta hora adicional (+R$ ${(curfewExtraHours * 200).toLocaleString('pt-BR')}).`;
-      } else if (extraHoursFromDuration > 0) {
-        curfewNotice = `Duração de ${durationHours}h excede o pacote base de ${mod.packageHours}h (+${extraHoursFromDuration}h adicionais a R$ 200/h).`;
-      }
-
       if (hasExtra) {
         durationInfoBadge.innerHTML = `
           <div class="flex items-center justify-between flex-wrap gap-2">
-            <span>⏱️ Duração: <strong>${durationHours} horas</strong> (${startTimeStr} às ${endTimeStr}) • Pacote base: <strong>${mod.packageHours}h inclusas</strong>.</span>
-            <span class="badge-duration-danger">⚠️ +${totalExtraHours}h adicionais (+R$ ${extraHourCost.toLocaleString('pt-BR')})</span>
+            <span>⏱️ Tempo Total Calculado: <strong>${durationHours} horas</strong> (${startTimeStr} às ${endTimeStr})</span>
+            <span class="badge-duration-danger">⚠️ +${totalExtraHours}h adicionais</span>
           </div>
-          ${curfewNotice ? `<div class="duration-extra-notice">🚨 ${curfewNotice}</div>` : ''}
+          <div class="duration-alert-red">
+            🚨 Horário de ${durationHours}h ultrapassa as <strong>8 horas do pacote base</strong> (+${totalExtraHours}h adicionais). Sugerimos contratar hora(s) extra(s) a R$ 200/h ou ajustar o horário para 8h para usufruir do pacote base sem custos extras.
+          </div>
         `;
       } else if (isUnderPackage) {
         durationInfoBadge.innerHTML = `
           <div class="flex items-center justify-between flex-wrap gap-2">
-            <span>⏱️ Duração: <strong>${durationHours} horas</strong> (${startTimeStr} às ${endTimeStr}) • Pacote base: <strong>${mod.packageHours}h inclusas</strong>.</span>
-            <span class="badge-duration-remaining">💡 Restam ${remainingHours}h sobrando no pacote base</span>
+            <span>⏱️ Tempo Total Calculado: <strong>${durationHours} horas</strong> (${startTimeStr} às ${endTimeStr})</span>
+            <span class="badge-duration-remaining">💡 Restam ${remainingHours}h no pacote base</span>
           </div>
-          <div class="duration-remaining-notice">
-            Você selecionou ${durationHours}h. Ainda tem <strong>${remainingHours}h disponíveis</strong> no seu pacote base de ${mod.packageHours}h sem nenhum custo adicional!
+          <div class="duration-alert-blue">
+            Você selecionou ${durationHours}h. Ainda tem <strong>${remainingHours} hora(s) sobrando</strong> no seu pacote base de 8h sem nenhum custo adicional!
           </div>
         `;
       } else {
         durationInfoBadge.innerHTML = `
           <div class="flex items-center justify-between flex-wrap gap-2">
-            <span>⏱️ Duração: <strong>${durationHours} horas</strong> (${startTimeStr} às ${endTimeStr}) • Pacote base: <strong>${mod.packageHours}h inclusas</strong>.</span>
-            <span class="text-emerald-400 font-semibold">✓ ${mod.packageHours}h corridas (duração exata do pacote base)</span>
+            <span>⏱️ Tempo Total Calculado: <strong>8 horas</strong> (${startTimeStr} às ${endTimeStr})</span>
+            <span class="text-emerald-400 font-semibold">✓ 8h inclusas (pacote base)</span>
+          </div>
+          <div class="duration-alert-green">
+            ✓ Duração exata de 8 horas: tempo padrão ideal incluso no seu pacote base.
           </div>
         `;
       }
@@ -366,81 +440,8 @@ document.addEventListener('DOMContentLoaded', () => {
       estimatedPricePeriod.textContent = `/ total da reserva (${durationHours}h de evento)`;
     }
 
-    // Renderiza o somatório detalhado das taxas com o quadrante limpo e claro
+    // Renderiza o somatório detalhado das taxas de forma limpa, consolidada e sem redundâncias
     if (feeBreakdownCard) {
-      const remainingHours = mod.packageHours - durationHours;
-      const rulesHtml = `
-        <div class="rules-summary-box">
-          <div class="rules-header">
-            <span class="rules-badge-title">📋 REGRAS COMERCIAIS DA SIMULAÇÃO</span>
-            <span class="rules-subtitle">Condições transparentes aplicadas ao cálculo do seu evento:</span>
-          </div>
-          <div class="rules-grid">
-            <div class="rule-card">
-              <div class="rule-card-header">
-                <span class="rule-card-icon">🏢</span>
-                <span class="rule-card-title">Pacote Base</span>
-              </div>
-              <p class="rule-card-desc"><strong>${mod.name}</strong> • Pacote padrão de <strong>${mod.packageHours}h corridas</strong>.</p>
-              <div class="rule-card-status">
-                ${extraHoursFromDuration > 0 
-                  ? `<span class="badge-rule-danger">⚠️ +${extraHoursFromDuration}h além do pacote</span>` 
-                  : (durationHours < mod.packageHours
-                      ? `<span class="badge-rule-remaining">💡 ${remainingHours}h sobrando no pacote base</span>`
-                      : `<span class="badge-rule-ok">✓ Duração dentro do pacote base</span>`
-                    )
-                }
-              </div>
-            </div>
-
-            <div class="rule-card">
-              <div class="rule-card-header">
-                <span class="rule-card-icon">⏰</span>
-                <span class="rule-card-title">Horário Limite da Casa</span>
-              </div>
-              <p class="rule-card-desc">A casa encerra às <strong>02:00</strong>. Encerramento a partir das 02h conta horas adicionais (R$ 200/h).</p>
-              <div class="rule-card-status">
-                ${curfewExtraHours > 0 
-                  ? `<span class="badge-rule-danger">⚠️ +${curfewExtraHours}h pós-02h (+R$ ${(curfewExtraHours * 200).toLocaleString('pt-BR')})</span>` 
-                  : `<span class="badge-rule-ok">✓ Encerramento até 02:00 (sem taxa extra)</span>`
-                }
-              </div>
-            </div>
-
-            <div class="rule-card">
-              <div class="rule-card-header">
-                <span class="rule-card-icon">⏱️</span>
-                <span class="rule-card-title">Duração Selecionada</span>
-              </div>
-              <p class="rule-card-desc">Horário: <strong>${startTimeStr} às ${endTimeStr}</strong> (total: <strong>${durationHours} horas</strong>).</p>
-              <div class="rule-card-status">
-                ${totalExtraHours > 0 
-                  ? `<span class="badge-rule-danger">⚠️ +${totalExtraHours}h adicionais (+R$ ${extraHourCost.toLocaleString('pt-BR')})</span>` 
-                  : (durationHours < mod.packageHours
-                      ? `<span class="badge-rule-remaining">💡 ${remainingHours}h disponíveis para usar</span>`
-                      : `<span class="badge-rule-ok">✓ Nenhuma hora adicional calculada</span>`
-                    )
-                }
-              </div>
-            </div>
-
-            <div class="rule-card">
-              <div class="rule-card-header">
-                <span class="rule-card-icon">🥩</span>
-                <span class="rule-card-title">Churrasqueira & Fogão</span>
-              </div>
-              <p class="rule-card-desc">Estrutura grande de alvenaria e fogão Venâncio (grátis com pré-agendamento).</p>
-              <div class="rule-card-status">
-                ${isChurrascoChecked 
-                  ? `<span class="badge-rule-ok">✓ Pré-agendada no formulário (R$ 0)</span>` 
-                  : `<span class="badge-rule-neutral">○ Não selecionada (selecione grátis para incluir)</span>`
-                }
-              </div>
-            </div>
-          </div>
-        </div>
-      `;
-
       const feesHtml = fees.map(f => `
         <div class="fee-row ${f.isExtra ? 'fee-row-extra' : ''}">
           <div class="fee-row-left">
@@ -450,11 +451,11 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
             <span class="fee-row-detail">${f.detail}</span>
           </div>
-          <span class="fee-row-value">${f.value === 0 ? 'R$ 0 (Incluso)' : `R$ ${f.value.toLocaleString('pt-BR')}`}</span>
+          <span class="fee-row-value">${f.value === 0 ? 'R$ 0 (Incluso)' : (f.isExtra ? `+ R$ ${f.value.toLocaleString('pt-BR')}` : `R$ ${f.value.toLocaleString('pt-BR')}`)}</span>
         </div>
       `).join('');
 
-      feeBreakdownCard.innerHTML = rulesHtml + feesHtml;
+      feeBreakdownCard.innerHTML = feesHtml;
     }
 
     updateAirbnbLink();
@@ -484,9 +485,14 @@ document.addEventListener('DOMContentLoaded', () => {
   // Executa o cálculo inicial
   calculateSimulation();
 
-  // Ação de Reserva Automática com envio formatado para WhatsApp
+  // Ação de Reserva Automática com envio formatado para WhatsApp e confirmação visual
   if (btnAutoBooking) {
     btnAutoBooking.addEventListener('click', () => {
+      // Evita duplo envio se já estiver em processamento
+      if (btnAutoBooking.classList.contains('is-sending') || btnAutoBooking.classList.contains('is-confirmed')) {
+        return;
+      }
+
       const mod = getCurrentModalityConfig();
       const modality = mod.name;
       const eventType = eventTypeSelect ? eventTypeSelect.value : 'Festa';
@@ -510,45 +516,108 @@ document.addEventListener('DOMContentLoaded', () => {
       const selectedExtras = [];
       extraCheckboxes.forEach(cb => {
         if (cb.checked) {
-          selectedExtras.push(cb.value);
+          if (cb.id === 'extraChurrasco') {
+            selectedExtras.push('Churrasqueira & Fogão Venâncio (Alvenaria) — Cortesia (R$ 0)');
+          } else if (cb.id === 'extraLimpeza') {
+            selectedExtras.push('Taxa de Limpeza Pós-Evento — R$ 350');
+          } else if (cb.id === 'extraSom') {
+            selectedExtras.push('Apoio Técnico de Som / DJ — R$ 300');
+          } else if (cb.id === 'extraHora') {
+            selectedExtras.push('Hora Adicional no Checklist — R$ 200/h');
+          } else {
+            selectedExtras.push(cb.value);
+          }
         }
       });
-      const extrasText = selectedExtras.length > 0 ? selectedExtras.join('\n• ') : 'Nenhum opcional selecionado';
+      const extrasText = selectedExtras.length > 0 ? selectedExtras.map(item => `  • ${item}`).join('\n') : '  • Nenhum item opcional selecionado';
       const notes = customOptionalNotes && customOptionalNotes.value.trim() ? customOptionalNotes.value.trim() : 'Nenhuma observação extra';
       const totalPrice = estimatedPriceEl ? estimatedPriceEl.textContent : 'Consulte';
 
-      // Mensagem consultiva e transparente com discriminação completa e regras da casa
-      const message = `🎉 *SOLICITAÇÃO DE RESERVA — PIUSS*
+      // Mensagem direta iniciando obrigatoriamente com a frase solicitada pelo usuário
+      const message = `Oi Piuss, Quero desconto no meu orçamento, vamos fechar?
 
-Olá, equipe do Piuss! Simulei meu evento no site oficial e quero confirmar a disponibilidade desta data:
+Simulei todas as opções do meu evento no site oficial e quero confirmar a reserva imediata desta data com vocês!
 
-• *Modalidade Desejada:* ${modality}
+📋 *DETALHES COMPLETOS DO MEU ORÇAMENTO:*
+• *Modalidade Selecionada:* ${modality}
 • *Tipo de Evento:* ${eventType}
-• *Data do Evento:* ${formattedDate}
-• *Horário:* Das ${startTimeStr} às ${endTimeStr} (${durationHours} horas corridas)
-• *Regras do Pacote Aplicadas:*
+• *Data Solicitada:* ${formattedDate}
+• *Horário:* Das ${startTimeStr} às ${endTimeStr} (${durationHours} horas de duração total)
+• *Regras do Pacote e Horas:*
   - Pacote Base: ${mod.packageHours} horas inclusas
-  - Horas Adicionais: ${totalExtraHours > 0 ? `${totalExtraHours}h adicionais a R$ 200/h (R$ ${extraHourCost.toLocaleString('pt-BR')})` : 'Nenhuma (dentro do limite do pacote)'}
-  - Encerramento: ${endTimeStr} (Casa encerra às 02h)
-• *Qtd. de Convidados:* ${guests} pessoas
-• *Cozinha / Churrasqueira:* ${isChurrascoChecked ? 'Churrasqueira e Fogão Venâncio (Estrutura de Alvenaria) incluído para pré-agendamento (Cortesia R$ 0)' : 'Sem pré-agendamento de churrasqueira'}
-• *Itens Opcionais Inclusos:*
-• ${extrasText}
-• *Outros Pedidos do Cliente:* ${notes}
+  - Horas Adicionais: ${totalExtraHours > 0 ? `${totalExtraHours}h extras (+ R$ ${extraHourCost.toLocaleString('pt-BR')})` : 'Nenhuma hora extra (dentro do pacote base)'}
+  - Horário Limite de Encerramento: 02h da madrugada
+• *Quantidade de Convidados:* ${guests} pessoas
+• *Estrutura Gourmet & Churrasqueira:* ${isChurrascoChecked ? 'Sim, pré-agendamento da Churrasqueira e Fogão Venâncio (Cortesia R$ 0)' : 'Não selecionado'}
 
-• *Estimativa Total Consolidada:* R$ ${totalPrice}
+✨ *ITENS OPCIONAIS SELECIONADOS:*
+${extrasText}
 
-Gostaria de verificar se esta data continua livre na agenda e tirar dúvidas para confirmarmos a reserva! 😊`;
+✍️ *OBSERVAÇÕES E PEDIDOS ESPECIAIS:*
+${notes}
+
+💰 *TOTAL CONSOLIDADO DO ORÇAMENTO:* R$ ${totalPrice}
+
+Conseguimos uma condição especial de desconto para confirmarmos a reserva de imediato? Aguardo o retorno de vocês! 🤝`;
 
       const encoded = encodeURIComponent(message);
       const url = `https://wa.me/${CONFIG.whatsappNumber}?text=${encoded}`;
-      const link = document.createElement('a');
-      link.href = url;
-      link.target = '_blank';
-      link.rel = 'noopener noreferrer';
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
+
+      // Feedback Visual Imediato no Botão: Barra de Progresso + Alteração de Cor
+      const bookingContent = document.getElementById('btnBookingContent');
+      const progressBar = document.getElementById('btnBookingProgress');
+
+      btnAutoBooking.classList.remove('pulse-btn');
+      btnAutoBooking.classList.add('is-sending');
+      if (bookingContent) {
+        bookingContent.innerHTML = `
+          <span class="btn-spinner"></span>
+          <span>Preparando orçamento para o WhatsApp...</span>
+        `;
+      }
+      if (progressBar) {
+        progressBar.style.width = '70%';
+      }
+
+      // Etapa 2: Confirmação visual em verde esmeralda vibrante e conclusão do progresso
+      setTimeout(() => {
+        btnAutoBooking.classList.remove('is-sending');
+        btnAutoBooking.classList.add('is-confirmed');
+        if (progressBar) {
+          progressBar.style.width = '100%';
+        }
+        if (bookingContent) {
+          bookingContent.innerHTML = `
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>✓ Orçamento Pronto! Abrindo WhatsApp...</span>
+          `;
+        }
+
+        // Abre o link do WhatsApp
+        const link = document.createElement('a');
+        link.href = url;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+        // Etapa 3: Restaura suavemente o estado padrão do botão após 3.5 segundos
+        setTimeout(() => {
+          btnAutoBooking.classList.remove('is-confirmed', 'is-sending');
+          btnAutoBooking.classList.add('pulse-btn');
+          if (progressBar) {
+            progressBar.style.width = '0%';
+          }
+          if (bookingContent) {
+            bookingContent.innerHTML = `
+              <svg class="icon icon-whatsapp" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.592 2.654-.696c1.02.571 1.813.784 2.806.784h.003c3.18 0 5.767-2.587 5.768-5.766.001-3.181-2.586-5.767-5.771-5.771zm7.42 5.766c-.001 4.093-3.332 7.424-7.423 7.424-1.255 0-2.484-.319-3.564-.925l-4.717 1.238 1.26-4.593c-.696-1.144-1.064-2.464-1.064-3.815.001-4.093 3.332-7.425 7.424-7.425 4.091 0 7.422 3.332 7.424 7.425z"/></svg>
+              <span class="btn-label-text">Reservar de Imediato via WhatsApp</span>
+            `;
+          }
+        }, 3500);
+
+      }, 450);
     });
   }
 
@@ -582,6 +651,36 @@ Gostaria de verificar se esta data continua livre na agenda e tirar dúvidas par
     'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
   ];
 
+  // Feriados Nacionais Brasileiros (Fixos e Móveis para 2026/2027)
+  const BRAZIL_HOLIDAYS_FIXED = {
+    '01-01': 'Confraternização Universal (Ano Novo)',
+    '04-21': 'Tiradentes',
+    '05-01': 'Dia do Trabalho',
+    '09-07': 'Independência do Brasil',
+    '10-12': 'Nossa Senhora Aparecida',
+    '11-02': 'Finados',
+    '11-15': 'Proclamação da República',
+    '11-20': 'Dia da Consciência Negra',
+    '12-25': 'Natal'
+  };
+
+  const BRAZIL_HOLIDAYS_MOVABLE = {
+    '2026-02-16': 'Carnaval',
+    '2026-02-17': 'Carnaval',
+    '2026-04-03': 'Sexta-feira Santa',
+    '2026-06-04': 'Corpus Christi',
+    '2027-02-08': 'Carnaval',
+    '2027-02-09': 'Carnaval',
+    '2027-03-26': 'Sexta-feira Santa',
+    '2027-05-27': 'Corpus Christi'
+  };
+
+  function getHolidayName(dateStr) {
+    if (BRAZIL_HOLIDAYS_MOVABLE[dateStr]) return BRAZIL_HOLIDAYS_MOVABLE[dateStr];
+    const mmDd = dateStr.slice(5); // 'MM-DD'
+    return BRAZIL_HOLIDAYS_FIXED[mmDd] || null;
+  }
+
   function renderCalendar() {
     if (!daysGrid || !currentMonthLabel) return;
 
@@ -609,9 +708,23 @@ Gostaria de verificar se esta data continua livre na agenda e tirar dúvidas par
       dayEl.textContent = d;
       dayEl.setAttribute('data-date', dateStr);
 
+      const dayDate = new Date(calendarYear, calendarMonth, d);
+      const dayOfWeek = dayDate.getDay(); // 0 = Domingo, 6 = Sábado
+      const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
+      const holidayName = getHolidayName(dateStr);
+      const isWeekendOrHoliday = isWeekend || !!holidayName;
+
       if (bookedDates.includes(dateStr)) {
         dayEl.classList.add('status-booked');
         dayEl.title = 'Data reservada via Airbnb';
+      } else if (isWeekendOrHoliday) {
+        dayEl.classList.add('status-weekend-holiday');
+        if (holidayName) {
+          dayEl.classList.add('is-holiday');
+          dayEl.title = `🇧🇷 Feriado Nacional: ${holidayName} (Alta Demanda)`;
+        } else {
+          dayEl.title = `Fim de Semana (${dayOfWeek === 6 ? 'Sábado' : 'Domingo'}) • Alta Demanda`;
+        }
       } else if (highDemandDates.includes(dateStr)) {
         dayEl.classList.add('status-high-demand');
         dayEl.title = 'Data com alta procura (quase esgotada)';
@@ -706,23 +819,26 @@ Gostaria de verificar se esta data continua livre na agenda e tirar dúvidas par
     });
   }
 
+  function filterGalleryByCategory(category) {
+    galleryItems.forEach(item => {
+      const itemCat = item.getAttribute('data-category');
+      if (category === 'all' || itemCat === category) {
+        item.style.display = 'block';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+    updateVisiblePhotos();
+  }
+
+  // Filtragem pelos Botões de Ambientes
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       filterBtns.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
 
       const category = btn.getAttribute('data-category');
-
-      galleryItems.forEach(item => {
-        const itemCat = item.getAttribute('data-category');
-        if (category === 'all' || itemCat === category) {
-          item.style.display = 'block';
-        } else {
-          item.style.display = 'none';
-        }
-      });
-
-      updateVisiblePhotos();
+      filterGalleryByCategory(category);
     });
   });
 

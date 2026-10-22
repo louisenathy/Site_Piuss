@@ -21,10 +21,10 @@
   <!-- Favicon com a identidade PiUSS -->
   <link rel="icon" type="image/png" href="assets/fotos/logo_png.png">
 
-  <!-- Google Fonts: Montserrat (Display) & Inter (Corpo) -->
+  <!-- Google Fonts: Outfit (Display & Cabeçalhos) & Plus Jakarta Sans (Corpo & Textos) - Modernas, Quentes e Humanas -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
 
   <!-- Estilos Customizados -->
   <link rel="stylesheet" href="css/style.css">
@@ -62,32 +62,35 @@
 </head>
 <body>
 
-  <!-- ==================== HEADER & NAVBAR (ESTRUTURA DE ABAS ANTERIORES) ==================== -->
+  <!-- ==================== HEADER & NAVBAR COM BOTÕES DE NAVEGAÇÃO ==================== -->
   <header class="site-header" id="header">
     <div class="header-container">
+      <!-- Logo PiUSS Priorizada e Destacada -->
       <a href="#hero" class="brand-logo" aria-label="PiUSS Início">
         <span class="logo-mark"><img src="assets/fotos/logo_png.png" alt="PiUSS"></span>
         <span class="logo-text">PiUSS<span class="logo-dot">.</span></span>
       </a>
 
+      <!-- Barra de Cabeçalho Centralizada com Botões de Fácil Rolagem -->
       <nav class="desktop-nav" aria-label="Navegação Principal">
-        <ul class="nav-links">
-          <li><a href="#experiencia" class="nav-link">O Espaço</a></li>
-          <li><a href="#galeria" class="nav-link">Galeria</a></li>
-          <li><a href="#estrutura" class="nav-link">Estrutura</a></li>
-          <li><a href="#simulador" class="nav-link">Simular Reserva</a></li>
-          <li><a href="#calendario" class="nav-link">Calendário Airbnb</a></li>
-          <li><a href="#contato" class="nav-link">Contatos</a></li>
-        </ul>
+        <div class="nav-dock">
+          <a href="#experiencia" class="nav-btn" data-target="experiencia">O Espaço</a>
+          <a href="#galeria" class="nav-btn" data-target="galeria">Galeria</a>
+          <a href="#estrutura" class="nav-btn" data-target="estrutura">Estrutura</a>
+          <a href="#simulador" class="nav-btn" data-target="simulador">Simular Reserva</a>
+          <a href="#calendario" class="nav-btn" data-target="calendario">Calendário Airbnb</a>
+          <a href="#contato" class="nav-btn" data-target="contato">Contatos</a>
+        </div>
       </nav>
 
+      <!-- Ações do Cabeçalho com Botões Alinhados -->
       <div class="header-actions">
         <a href="#calendario" class="btn btn-sm btn-outline-amber desktop-only">
           <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/></svg>
-          Verificar Datas
+          <span>Verificar Datas</span>
         </a>
         <a href="https://wa.me/5511921422403?text=Ol%C3%A1!%20Vim%20pelo%20site%20do%20Piuss%20e%20gostaria%20de%20consultar%20a%20disponibilidade%20para%20meu%20evento." target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-whatsapp">
-          <svg class="icon icon-whatsapp" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.592 2.654-.696c1.02.571 1.813.784 2.806.784h.003c3.18 0 5.767-2.587 5.768-5.766.001-3.181-2.586-5.767-5.771-5.767zm7.42 5.766c-.001 4.093-3.332 7.424-7.423 7.424-1.255 0-2.484-.319-3.564-.925l-4.717 1.238 1.26-4.593c-.696-1.144-1.064-2.464-1.064-3.815.001-4.093 3.332-7.425 7.424-7.425 4.091 0 7.422 3.332 7.424 7.425z"/></svg>
+          <svg class="icon icon-whatsapp" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.592 2.654-.696c1.02.571 1.813.784 2.806.784h.003c3.18 0 5.767-2.587 5.768-5.766.001-3.181-2.586-5.767-5.771-5.771zm7.42 5.766c-.001 4.093-3.332 7.424-7.423 7.424-1.255 0-2.484-.319-3.564-.925l-4.717 1.238 1.26-4.593c-.696-1.144-1.064-2.464-1.064-3.815.001-4.093 3.332-7.425 7.424-7.425 4.091 0 7.422 3.332 7.424 7.425z"/></svg>
           <span>Falar no WhatsApp</span>
         </a>
 
@@ -100,19 +103,26 @@
       </div>
     </div>
 
-    <!-- Mobile Drawer Nav -->
+    <!-- Mobile Drawer Nav com Botões -->
     <div class="mobile-drawer" id="mobileDrawer">
-      <ul class="mobile-nav-links">
-        <li><a href="#experiencia" class="mobile-nav-link">O Espaço</a></li>
-        <li><a href="#galeria" class="mobile-nav-link">Galeria</a></li>
-        <li><a href="#estrutura" class="mobile-nav-link">Estrutura</a></li>
-        <li><a href="#simulador" class="mobile-nav-link">Simular Reserva</a></li>
-        <li><a href="#calendario" class="mobile-nav-link">Calendário Airbnb</a></li>
-        <li><a href="#faq" class="mobile-nav-link">Dúvidas Frequentes</a></li>
-        <li><a href="#contato" class="mobile-nav-link">Contatos</a></li>
-      </ul>
+      <div class="mobile-nav-dock">
+        <a href="#experiencia" class="mobile-nav-btn">O Espaço</a>
+        <a href="#galeria" class="mobile-nav-btn">Galeria</a>
+        <a href="#estrutura" class="mobile-nav-btn">Estrutura</a>
+        <a href="#simulador" class="mobile-nav-btn">Simular Reserva</a>
+        <a href="#calendario" class="mobile-nav-btn">Calendário Airbnb</a>
+        <a href="#faq" class="mobile-nav-btn">Dúvidas Frequentes</a>
+        <a href="#contato" class="mobile-nav-btn">Contatos</a>
+      </div>
       <div class="mobile-drawer-cta">
-        <a href="#calendario" class="btn btn-primary btn-block">Checar Datas Disponíveis</a>
+        <a href="#calendario" class="btn btn-outline-amber btn-block">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/></svg>
+          <span>Verificar Datas Disponíveis</span>
+        </a>
+        <a href="https://wa.me/5511921422403?text=Ol%C3%A1!%20Vim%20pelo%20site%20do%20Piuss%20e%20gostaria%20de%20consultar%20a%20disponibilidade%20para%20meu%20evento." target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-block" style="margin-top: 10px;">
+          <svg class="icon icon-whatsapp" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.592 2.654-.696c1.02.571 1.813.784 2.806.784h.003c3.18 0 5.767-2.587 5.768-5.766.001-3.181-2.586-5.767-5.771-5.771zm7.42 5.766c-.001 4.093-3.332 7.424-7.423 7.424-1.255 0-2.484-.319-3.564-.925l-4.717 1.238 1.26-4.593c-.696-1.144-1.064-2.464-1.064-3.815.001-4.093 3.332-7.425 7.424-7.425 4.091 0 7.422 3.332 7.424 7.425z"/></svg>
+          <span>Falar no WhatsApp</span>
+        </a>
       </div>
     </div>
   </header>
@@ -271,7 +281,6 @@
           
           <!-- Modalidade 1: Casa Toda -->
           <div class="modality-card highlighted">
-            <div class="modality-badge-top">Até 160 Pessoas em Pé</div>
             <div class="modality-img-wrapper">
               <img src="assets/fotos/terreo/palco_principal.jpeg" alt="Piuss Casa Toda - Dois Andares Exclusivos" loading="lazy">
             </div>
@@ -302,7 +311,6 @@
 
           <!-- Modalidade 2: Espaço Palco (Térreo) -->
           <div class="modality-card">
-            <div class="modality-badge-top" style="background:#e05a2b; color:#fff;">Até 100 Pessoas em Pé</div>
             <div class="modality-img-wrapper">
               <img src="assets/fotos/terreo/palco_som_iluminacao.jpeg" alt="Espaço Palco no Piuss - Andar Térreo" loading="lazy">
             </div>
@@ -333,7 +341,6 @@
 
           <!-- Modalidade 3: Salão Karaokê (Piso Superior) -->
           <div class="modality-card">
-            <div class="modality-badge-top" style="background:#f3b344; color:#000;">Até 50 Pessoas Sentadas</div>
             <div class="modality-img-wrapper">
               <img src="assets/fotos/andar/salao_superior_karaoke.jpeg" alt="Salão Karaokê no Piuss - Piso Superior" loading="lazy">
             </div>
@@ -379,15 +386,17 @@
           </p>
         </div>
 
-        <!-- Category Filters -->
-        <div class="gallery-filters" role="tablist" aria-label="Filtros da Galeria">
-          <button class="filter-btn active" data-category="all" role="tab">Todos os Ambientes</button>
-          <button class="filter-btn" data-category="fachada" role="tab">Fachada</button>
-          <button class="filter-btn" data-category="recepcao" role="tab">Recepção</button>
-          <button class="filter-btn" data-category="palco" role="tab">Palco para Shows</button>
-          <button class="filter-btn" data-category="gourmet" role="tab">Área Gourmet</button>
-          <button class="filter-btn" data-category="karaoke" role="tab">Salão com Karaokê</button>
-          <button class="filter-btn" data-category="fumodromo" role="tab">Fumódromo</button>
+        <!-- Abas de Seleção com os 6 Ambientes -->
+        <div class="gallery-controls-wrapper">
+          <div class="gallery-filters" role="tablist" aria-label="Filtros da Galeria">
+            <button class="filter-btn active" data-category="all" role="tab">Todos os Ambientes</button>
+            <button class="filter-btn" data-category="fachada" role="tab">Fachada</button>
+            <button class="filter-btn" data-category="recepcao" role="tab">Recepção & Bar</button>
+            <button class="filter-btn" data-category="palco" role="tab">Palco para Shows</button>
+            <button class="filter-btn" data-category="gourmet" role="tab">Área Gourmet</button>
+            <button class="filter-btn" data-category="karaoke" role="tab">Salão Karaokê</button>
+            <button class="filter-btn" data-category="fumodromo" role="tab">Fumódromo</button>
+          </div>
         </div>
 
         <!-- Photos Grid com Legendas Padronizadas Conforme Solicitação -->
@@ -530,10 +539,11 @@
               <button class="cal-nav-btn" id="calNextMonth" aria-label="Próximo Mês">▶</button>
             </div>
 
-            <!-- Legenda com gatilho de escassez -->
+            <!-- Legenda com destaque para Finais de Semana e Feriados Nacionais -->
             <div class="calendar-legend">
               <div class="legend-item"><span class="legend-color available"></span> Disponível</div>
-              <div class="legend-item"><span class="legend-color high-demand"></span> Quase Esgotado (Consultas em Andamento)</div>
+              <div class="legend-item"><span class="legend-color weekend-holiday"></span> Finais de Semana & Feriados Nacionais</div>
+              <div class="legend-item"><span class="legend-color high-demand"></span> Quase Esgotado</div>
               <div class="legend-item"><span class="legend-color booked"></span> Data Ocupada</div>
             </div>
           </div>
@@ -698,44 +708,44 @@
 
             </div>
 
-            <!-- Adicionais / Opcionais com Valores Transparentes -->
+            <!-- Itens Opcionais -->
             <div class="extras-section">
               <label class="form-label">
-                <span class="label-icon">✨</span> Itens Opcionais (Valores Unitários Transparentes):
+                <span class="label-icon">✨</span> Itens Opcionais:
               </label>
               
               <div class="extras-grid">
                 
                 <!-- Churrasqueira & Fogão Venâncio (requer aviso prévio) -->
                 <label class="extra-checkbox-card" id="cardExtraChurrasco">
-                  <input type="checkbox" id="extraChurrasco" value="Churrasqueira & Fogão Venâncio (requer aviso prévio)" data-price="0" checked>
+                  <input type="checkbox" id="extraChurrasco" value="Churrasqueira & Fogão Venâncio (Alvenaria)" data-price="0" checked>
                   <div class="extra-content">
                     <span class="extra-name">Churrasqueira & Fogão Venâncio (Alvenaria)</span>
-                    <span class="extra-sub text-emerald-accent">R$ 0 (Grátis) • Mesmo grátis, selecione para incluir e garantir o pré-agendamento da estrutura</span>
+                    <span class="extra-sub text-emerald-accent">R$ 0 (Cortesia) • Selecione para garantir o pré-agendamento da estrutura</span>
                   </div>
                 </label>
 
                 <!-- Limpeza pós-evento R$ 350 -->
                 <label class="extra-checkbox-card">
-                  <input type="checkbox" id="extraLimpeza" value="Taxa de Limpeza Pós-Evento (R$ 350)" data-price="350" checked>
+                  <input type="checkbox" id="extraLimpeza" value="Taxa de Limpeza Pós-Evento" data-price="350" checked>
                   <div class="extra-content">
                     <span class="extra-name">Limpeza Pós-Evento</span>
-                    <span class="extra-sub">Opcional • R$ 350 unitário</span>
+                    <span class="extra-sub">Opcional • R$ 350</span>
                   </div>
                 </label>
 
                 <!-- Apoio Som / DJ R$ 300 -->
                 <label class="extra-checkbox-card">
-                  <input type="checkbox" id="extraSom" value="Apoio Técnico de Som / DJ (R$ 300)" data-price="300">
+                  <input type="checkbox" id="extraSom" value="Apoio Técnico de Som / DJ" data-price="300">
                   <div class="extra-content">
                     <span class="extra-name">Apoio Som / DJ</span>
-                    <span class="extra-sub">Opcional • R$ 300 unitário</span>
+                    <span class="extra-sub">Opcional • R$ 300</span>
                   </div>
                 </label>
 
                 <!-- Hora Adicional R$ 200 -->
                 <label class="extra-checkbox-card">
-                  <input type="checkbox" id="extraHora" value="Hora Adicional (R$ 200/h)" data-price="200">
+                  <input type="checkbox" id="extraHora" value="Hora Adicional Contratada" data-price="200">
                   <div class="extra-content">
                     <span class="extra-name">Hora Adicional</span>
                     <span class="extra-sub">Opcional • R$ 200 / hora</span>
@@ -745,24 +755,29 @@
               </div>
             </div>
 
-            <!-- Resumo da Simulação (Estimativa Consolidada & Somatório Detalhado) -->
+            <!-- Estimativa Consolidada & Somatório Detalhado (Reorganizado de forma clara e limpa) -->
             <div class="simulator-summary-box">
               <div class="summary-details">
-                <span class="summary-label">Estimativa Consolidada & Somatório Detalhado:</span>
+                <div class="summary-header-block">
+                  <span class="summary-label">Estimativa Consolidada & Somatório Detalhado</span>
+                  <span class="summary-sublabel">Valores discriminados por item selecionado:</span>
+                </div>
 
-                <!-- Detalhamento discriminado das taxas e valores -->
+                <!-- Detalhamento discriminado das taxas e valores (Sem duplicidades) -->
                 <div class="fee-breakdown-card" id="feeBreakdownCard">
                   <!-- Renderizado dinamicamente via JS -->
                 </div>
 
                 <div class="summary-price-wrapper">
-                  <span class="currency">R$</span>
-                  <span class="price-value" id="estimatedPrice">1.890</span>
-                  <span class="price-period" id="estimatedPricePeriod">/ valor total estimado</span>
+                  <div class="price-desc-col">
+                    <span class="price-title-label">Total Consolidado da Locação:</span>
+                    <span class="price-period" id="estimatedPricePeriod">Pacote base + itens e horas selecionados</span>
+                  </div>
+                  <div class="price-val-col">
+                    <span class="currency">R$</span>
+                    <span class="price-value" id="estimatedPrice">1.890</span>
+                  </div>
                 </div>
-                <p class="summary-disclaimer" id="summaryDisclaimer">
-                  🔒 Valor discriminado com transparência total: pacote base + horas adicionais (se houver) + taxas opcionais selecionadas. Sem cobranças surpresas!
-                </p>
               </div>
             </div>
 
@@ -777,10 +792,16 @@
 
             <!-- Botões de Reserva e Anúncio (Alinhados diretamente abaixo do campo de texto a mais) -->
             <div class="simulator-actions-wrapper">
+              <p class="simulator-actions-notice">
+                <span>⚡ Envie seu orçamento completo e reserve de imediato sua data via WhatsApp:</span>
+              </p>
               <div class="simulator-actions-row">
                 <button type="button" id="btnAutoBooking" class="btn btn-whatsapp btn-booking-action shadow-glow pulse-btn">
-                  <svg class="icon icon-whatsapp" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.592 2.654-.696c1.02.571 1.813.784 2.806.784h.003c3.18 0 5.767-2.587 5.768-5.766.001-3.181-2.586-5.767-5.771-5.771zm7.42 5.766c-.001 4.093-3.332 7.424-7.423 7.424-1.255 0-2.484-.319-3.564-.925l-4.717 1.238 1.26-4.593c-.696-1.144-1.064-2.464-1.064-3.815.001-4.093 3.332-7.425 7.424-7.425 4.091 0 7.422 3.332 7.424 7.425z"/></svg>
-                  <span>Reservar Esta Data via WhatsApp</span>
+                  <span class="btn-progress-bar" id="btnBookingProgress"></span>
+                  <span class="btn-booking-content" id="btnBookingContent">
+                    <svg class="icon icon-whatsapp" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.592 2.654-.696c1.02.571 1.813.784 2.806.784h.003c3.18 0 5.767-2.587 5.768-5.766.001-3.181-2.586-5.767-5.771-5.771zm7.42 5.766c-.001 4.093-3.332 7.424-7.423 7.424-1.255 0-2.484-.319-3.564-.925l-4.717 1.238 1.26-4.593c-.696-1.144-1.064-2.464-1.064-3.815.001-4.093 3.332-7.425 7.424-7.425 4.091 0 7.422 3.332 7.424 7.425z"/></svg>
+                    <span class="btn-label-text">Reservar de Imediato via WhatsApp</span>
+                  </span>
                 </button>
 
                 <a href="https://www.airbnb.com.br/rooms/1597439801435361378?guests=1&adults=1&s=67&unique_share_id=e0e79d63-2d7c-4f73-b2c6-f8e935d0dec6" id="btnAirbnbBooking" target="_blank" rel="noopener noreferrer" class="btn btn-airbnb btn-booking-action">
@@ -848,23 +869,6 @@
                 </a>
 
               </div>
-
-              <!-- Anúncios Oficiais do Airbnb -->
-              <div class="other-platforms">
-                <span class="other-platforms-title">Anúncios Oficiais no Airbnb:</span>
-                <div class="platforms-badges">
-                  <a href="https://www.airbnb.com.br/rooms/1597439801435361378?guests=1&adults=1&s=67&unique_share_id=e0e79d63-2d7c-4f73-b2c6-f8e935d0dec6" target="_blank" rel="noopener noreferrer" class="platform-badge">
-                    <span>Casa Toda (Até 160) ↗</span>
-                  </a>
-                  <a href="https://www.airbnb.com.br/rooms/1618862847098039723?guests=1&adults=1&s=67&unique_share_id=6f9f4611-872f-46c4-8391-85737fd554a1" target="_blank" rel="noopener noreferrer" class="platform-badge">
-                    <span>Espaço Palco (Até 100) ↗</span>
-                  </a>
-                  <a href="https://www.airbnb.com.br/rooms/1652316286556122188?guests=1&adults=1&s=67&unique_share_id=91205b42-eb3b-4d89-a00f-32675e31c67e" target="_blank" rel="noopener noreferrer" class="platform-badge">
-                    <span>Salão Karaokê (Até 50) ↗</span>
-                  </a>
-                </div>
-              </div>
-
             </div>
 
             <!-- Mapa Interativo do Google Maps -->
